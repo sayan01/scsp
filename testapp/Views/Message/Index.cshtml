@@ -1,0 +1,26 @@
+@{
+    ViewData["Title"] = "Messages - SCSP";
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/message.css")" rel="stylesheet" type="text/css" />
+}
+
+<div class="text-center">
+    <h1 class="display-4">Messages</h1>
+    @for(var i = 10; i < 16; i++)
+        {
+            <div class="card mt-5 mb-5 pt-3 pb-3">
+                <div class="card-body">
+                    <h5 class="card-title mt-3 mb-3">
+                    <i class="fa-regular fa-user"></i>
+                    User @i</h5>
+                    <hr/>
+                    <p class="card-text mt-3 mb-3">Some quick example text to build on the card title and make up the bulk of the card content.</p>
+                    <a href="#" class="btn btn-primary">
+                    <i class="fa-regular fa-comment"></i>
+                    Reply</a>
+                </div>
+            </div>
+        }
+   </div>
