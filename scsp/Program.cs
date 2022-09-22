@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<MvcUserContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("MvcUserContext") ?? throw new InvalidOperationException("Connection string 'MvcUserContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
