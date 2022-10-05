@@ -19,7 +19,6 @@ namespace scsp.Models
         public string? Bio {get; set;} = "";
         
         // foreign key to photo table
-        public int? PhotoID {get; set;}
         public Photo? Photo {get; set; }
 
         // foreign key to user table (follows)
