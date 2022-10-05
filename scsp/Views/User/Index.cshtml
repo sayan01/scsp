@@ -24,9 +24,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Bio)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Photo)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -44,9 +41,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Bio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Photo.PhotoID)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.UserID">Edit</a> |

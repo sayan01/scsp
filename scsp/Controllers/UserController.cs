@@ -21,8 +21,9 @@ namespace scsp.Controllers
         // GET: User
         public async Task<IActionResult> Index()
         {
-            var sCSPDataContext = _context.User.Include(u => u.Photo);
-            return View(await sCSPDataContext.ToListAsync());
+              return _context.User != null ? 
+                          View(await _context.User.ToListAsync()) :
+                          Problem("Entity set 'SCSPDataContext.User'  is null.");
         }
 
         // GET: User/Details/5
@@ -34,7 +35,6 @@ namespace scsp.Controllers
             }
 
             var user = await _context.User
-                .Include(u => u.Photo)
                 .FirstOrDefaultAsync(m => m.UserID == id);
             if (user == null)
             {
@@ -47,7 +47,6 @@ namespace scsp.Controllers
         // GET: User/Create
         public IActionResult Create()
         {
-            ViewData["PhotoID"] = new SelectList(_context.Photo, "PhotoID", "PhotoID");
             return View();
         }
 
@@ -56,7 +55,7 @@ namespace scsp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserID,PasswordHash,FName,LName,Bio,PhotoID")] User user)
+        public async Task<IActionResult> Create([Bind("UserID,PasswordHash,FName,LName,Bio")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +63,6 @@ namespace scsp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PhotoID"] = new SelectList(_context.Photo, "PhotoID", "PhotoID", user.PhotoID);
             return View(user);
         }
 
@@ -81,7 +79,6 @@ namespace scsp.Controllers
             {
                 return NotFound();
             }
-            ViewData["PhotoID"] = new SelectList(_context.Photo, "PhotoID", "PhotoID", user.PhotoID);
             return View(user);
         }
 
@@ -90,7 +87,7 @@ namespace scsp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("UserID,PasswordHash,FName,LName,Bio,PhotoID")] User user)
+        public async Task<IActionResult> Edit(string id, [Bind("UserID,PasswordHash,FName,LName,Bio")] User user)
         {
             if (id != user.UserID)
             {
@@ -117,7 +114,6 @@ namespace scsp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PhotoID"] = new SelectList(_context.Photo, "PhotoID", "PhotoID", user.PhotoID);
             return View(user);
         }
 
@@ -130,7 +126,6 @@ namespace scsp.Controllers
             }
 
             var user = await _context.User
-                .Include(u => u.Photo)
                 .FirstOrDefaultAsync(m => m.UserID == id);
             if (user == null)
             {
