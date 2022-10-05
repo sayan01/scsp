@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<SCSPDataContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("SCSPDataContext") ?? throw new InvalidOperationException("Connection string 'SCSPDataContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
