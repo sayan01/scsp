@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "Authentication - SCSP";
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/auth.css")" rel="stylesheet" type="text/css" />
+}
+
+
+<div class="text-center">
+    <h1 class="display-4">Social Content Sharing Platform</h1>
+    <a asp-controller="Authentication" asp-action="Login" class="btn btn-primary">Login</a>
+    <a asp-controller="Authentication" asp-action="Register" class="btn btn-primary">Register</a>
+</div>
