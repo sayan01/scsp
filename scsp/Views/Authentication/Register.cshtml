@@ -1,7 +1,7 @@
 @model scsp.Models.User
 
 @{
-    ViewData["Title"] = "Register - SCSP";
+    ViewData["Title"] = "Register";
 }
 
 @section Styles {
@@ -12,6 +12,15 @@
 <div class="text-center">
     <h1 class="display-4">Social Content Sharing Platform</h1>
     <h1 class="display-5">Register</h1>
+    @if (@ViewData["message"] != null)
+    {
+        string? alert = (String?)ViewData["alert"];
+        alert = alert!=null ? alert : "danger";
+        <div class="alert alert-@alert alert-dismissible fade show" role="alert">
+            <h5>@ViewData["message"]</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 </div>
 
 <div class="row">
@@ -20,7 +29,7 @@
             <div class="form-group">
                 <label asp-for="UserID" class="control-label">Username</label>
                 <span class="text text-danger">*</span>
-                <input asp-for="UserID" class="form-control" required maxlength="32" minlength="1" name="username" id="username"/>
+                <input class="form-control" required maxlength="32" minlength="1" name="username" id="username"/>
             </div>
             <div class="form-group">
                 <label class="control-label">Password</label>
@@ -30,15 +39,15 @@
             <div class="form-group">
                 <label asp-for="FName" class="control-label">First Name</label>
                 <span class="text text-danger">*</span>
-                <input asp-for="FName" class="form-control" required maxlength="32" name="fname" id="fname"/>
+                <input class="form-control" required maxlength="32" name="fname" id="fname"/>
             </div>
             <div class="form-group">
                 <label asp-for="LName" class="control-label">Last Name</label>
-                <input asp-for="LName" class="form-control" maxlength="32" name="lname" id="lname"/>
+                <input class="form-control" maxlength="32" name="lname" id="lname"/>
             </div>
             <div class="form-group">
                 <label asp-for="Bio" class="control-label"></label>
-                <textarea asp-for="Bio" class="form-control" type="text" maxlength="250" form="register-form" name="bio" id="bio"></textarea>
+                <textarea class="form-control" type="text" maxlength="250" form="register-form" name="bio" id="bio"></textarea>
             </div>
             <br>
             <div class="form-group">
@@ -48,8 +57,8 @@
     </div>
 </div>
 <br><hr><br>
-<div>
-    <a asp-action="Index">Back to Authentication</a>
+<div class="text-center">
+    Already an user? <a asp-action="Login">Login</a>
 </div>
 
 @section Scripts {

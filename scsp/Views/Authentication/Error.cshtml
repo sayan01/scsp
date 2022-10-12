@@ -1,0 +1,16 @@
+@model scsp.Models.ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="alert alert-danger" role="alert">
+    <h2>Error Occured while registering</h2>
+    @if(Model.Title != null){
+        <h4>@Model.Title</h4>
+    }
+    @if(Model.Details != null){
+        <h5>@Model.Details</h5>
+    }
+</div>

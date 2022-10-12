@@ -12,26 +12,18 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.PasswordHash)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Bio)
-            </th>
-            <th></th>
+            <th>username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Bio</th>
+            <th>Options</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.PasswordHash)
+                @Html.DisplayFor(modelItem => item.UserID)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FName)

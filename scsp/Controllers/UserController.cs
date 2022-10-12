@@ -34,8 +34,7 @@ namespace scsp.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User
-                .FirstOrDefaultAsync(m => m.UserID == id);
+            var user = await _context.User.FirstOrDefaultAsync(m => m.UserID == id);
             if (user == null)
             {
                 return NotFound();
