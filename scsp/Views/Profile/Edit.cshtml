@@ -1,0 +1,63 @@
+@model scsp.ViewModels.ProfileEditViewModel
+
+@{
+    ViewData["Title"] = "Edit Profile";
+    string username = @Model.currentuser.UserID;
+    string fname = @Model.currentuser.FName;
+    string lname = @Model.currentuser.LName ?? "";
+    string bio = @Model.currentuser.Bio ?? "";
+    string name = fname + " " + lname;
+    string initials = fname[0] + "" + lname[0];
+    string avatardefault = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
+}
+
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="currentuser.UserID" name="username" id="username" />
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-lg-9 col-xl-7">
+            <div class="card">
+            <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
+                <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+                    <img src='@avatardefault'
+                    alt="profile photo" class="img-fluid img-thumbnail mt-4 mb-2"
+                    style="width: 150px; z-index: 1; border-radius: 50%">
+                </div>
+                <div class="ms-3" style="margin-top: 130px;">
+                <h5>@Model.currentuser.UserID</h5>
+                </div>
+            </div>
+            <div class="card-body p-4 text-black">
+                <div class="mb-5">
+                <p class="lead fw-normal mb-1">Edit Profile</p>
+                <div class="form-group">
+                    <label asp-for="currentuser.FName" class="control-label">First Name</label>
+                    <input asp-for="currentuser.FName" placeholder="First Name" class="form-control" name="fname" id="fname" />
+                    <span asp-validation-for="currentuser.FName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="currentuser.LName" class="control-label">Last Name</label>
+                    <input asp-for="currentuser.LName" placeholder="Last Name" class="form-control" name="lname" id="lname" />
+                    <span asp-validation-for="currentuser.LName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="currentuser.Bio" class="control-label"></label>
+                    <textarea asp-for="currentuser.Bio" placeholder="Bio" class="form-control" name="bio" id="bio" ></textarea>
+                    <span asp-validation-for="currentuser.Bio" class="text-danger"></span>
+                </div>
+                <br>
+                <span class="form-group">
+                    <input type="submit" value="Save" class="btn btn-success me-2" />
+                </span>
+                <span>
+                    <a asp-action="Index" class="btn btn-outline-danger">Cancel</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

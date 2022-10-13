@@ -1,5 +1,6 @@
-﻿@{
-    ViewData["Title"] = "SCSP";
+﻿@model scsp.ViewModels.HomeIndexViewModel
+@{
+    ViewData["Title"] = "Home";
 }
 
 @section Styles {
@@ -8,8 +9,12 @@
 
 
 <div class="text-center">
-    <h1 class="display-4">Social Content Sharing Platform</h1>
-    @for(var i = 10; i < 16; i++)
+    <h1 class="display-4">Home</h1>
+    <h5 class="text-secondary">Logged In User: @Model.currentuser.UserID</h1>
+    <br>
+    <a class="btn btn-outline-primary" asp-action="Create" asp-controller="Post"><i class="fa-solid fa-plus"></i> New Post</a>
+    <br><hr><br>
+    @for(var i = 0; i < 6; i++)
         {
             <div class="card mt-5 mb-5 pt-3 pb-3">
                 <div class="card-body">

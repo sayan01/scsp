@@ -2,34 +2,35 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using scsp.Models;
+using scsp.ViewModels;
 
 namespace scsp.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly SCSPDataContext _context;
 
-    public HomeController(ILogger<HomeController> logger)
+
+    public HomeController(ILogger<HomeController> logger, SCSPDataContext context)
     {
         _logger = logger;
+        _context = context;
+
     }
     [Authorize]
     public IActionResult Index()
     {
         var identity = HttpContext.User.Identity;
-        var name = identity != null ? identity.Name : "no user signed in";
-        Console.WriteLine(name);
-        return View();
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        var username = identity != null ? identity.Name : null;
+        Console.WriteLine(username);
+        var user = _context.User.FirstOrDefault(m => m.UserID == username);
+        if(user == null){
+            return RedirectToAction("Logout", "Authentication");
+        }
+        HomeIndexViewModel vm = new HomeIndexViewModel{
+            currentuser = user == null ? new User(): user
+        };
+        return View(vm);
     }
 }

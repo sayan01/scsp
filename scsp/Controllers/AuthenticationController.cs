@@ -83,6 +83,12 @@ namespace scsp.Controllers
             user.FName = fname;
             user.LName = lname;
             user.Bio = bio;
+            user.FollowedBy = new List<User>();
+            user.Follows = new List<User>();
+            user.Posts = new List<Post>();
+            user.Donations = new List<Donation>();
+            user.MessagesSent = new List<Message>();
+            user.MessagesRecieved = new List<Message>();
 
             byte[] passwordbytes = System.Text.Encoding.UTF8.GetBytes(username + password);
             byte[] result;
@@ -117,11 +123,11 @@ namespace scsp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(string username, string password)
+        public async Task<IActionResult> Login(string username, string password, string remember)
         {
             if(username == null)   return Login("Username cannot be empty");
             if(password == null)   return Login("Password cannot be empty");
-            
+            Console.WriteLine("Remember Me:" + remember);
             string passwordhash;
             // finding the password hash from username+password
             {
@@ -141,7 +147,11 @@ namespace scsp.Controllers
                 else{
                     var claims = new List<Claim>{ new Claim(ClaimTypes.Name, username) };
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    var authProperties = new AuthenticationProperties{ AllowRefresh = true, IsPersistent = true, ExpiresUtc = DateTime.UtcNow.AddMinutes(2) };
+                    var authProperties = new AuthenticationProperties{ 
+                        AllowRefresh = true, 
+                        IsPersistent = true, 
+                        ExpiresUtc = DateTime.UtcNow.AddMinutes(remember == "on" ? 86400 : 30)
+                    };
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,new ClaimsPrincipal(claimsIdentity),authProperties);
                     return RedirectToAction("Index","Home");
                 }
@@ -155,7 +165,7 @@ namespace scsp.Controllers
         }
         public async Task<IActionResult> Logout(){
             await HttpContext.SignOutAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
     }
 }
