@@ -1,6 +1,6 @@
-@model scsp.Models.User
+@model scsp.ViewModels.AuthLoginViewModel
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = Model != null ? Model.Title : "L";
 }
 
 @section Styles {
@@ -11,12 +11,11 @@
 <div class="text-center">
     <h1 class="display-4">Social Content Sharing Platform</h1>
     <h1 class="display-5">Login</h1>
-    @if (@ViewData["message"] != null)
+    @if (Model != null && ! String.IsNullOrEmpty(Model.AlertMsg))
     {
-        string? alert = (String?)ViewData["alert"];
-        alert = alert!=null ? alert : "danger";
+        string alert = Model.AlertType;
         <div class="alert alert-@alert alert-dismissible fade show" role="alert">
-            <h5>@ViewData["message"]</h5>
+            <h5>@Model.AlertMsg</h5>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
@@ -26,14 +25,14 @@
     <div class="col-md-4">
         <form asp-action="Login" id="login-form">
             <div class="form-group">
-                <label asp-for="UserID" class="control-label">Username</label>
+                <label asp-for="User.UserID" class="control-label">Username</label>
                 <span class="text text-danger">*</span>
-                <input class="form-control" required maxlength="32" minlength="1" name="username" id="username"/>
+                <input asp-for="User.UserID" class="form-control" required maxlength="32" minlength="1" name="username" id="username"/>
             </div>
             <div class="form-group">
-                <label class="control-label">Password</label>
+                <label asp-for="password" class="control-label">Password</label>
                 <span class="text text-danger">*</span>
-                <input class="form-control" type="password" required minlength="8" name="password" id="password"/>
+                <input asp-for="password" class="form-control" type="password" required minlength="8" name="password" id="password"/>
             </div>
             <br>
             <div class="form-group">

@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using scsp.Models;
+using scsp.ViewModels;
 using System.Security.Cryptography;
-
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace scsp.Controllers
 {
@@ -23,22 +26,36 @@ namespace scsp.Controllers
 
         public IActionResult Index()
         {
-              return View();
+            return View();
         }
-        public IActionResult Login(string message)
+        public IActionResult Login(string message = "")
         {
+            AuthLoginViewModel authLoginViewModel = new AuthLoginViewModel(){
+                Title = "Login",
+                AlertMsg = message,
+                AlertType = "danger",
+                password = "",
+                User = new User()
+            };
             if (message != null){
                 ViewData["message"] = message;
             }
-            return View();
+            return View(authLoginViewModel);
         }
         public IActionResult Register(string message, string alert = "danger")
         {
+            AuthRegisterViewModel AuthRegisterViewModel = new AuthRegisterViewModel(){
+                Title = "Register",
+                AlertMsg = message,
+                AlertType = alert,
+                password = "",
+                User = new User()
+            };
             if (message != null){
                 ViewData["message"] = message;
                 ViewData["alert"] = alert;
             }
-            return View();
+            return View(AuthRegisterViewModel);
         }
         public IActionResult Error(string title, string details)
         {
@@ -91,7 +108,7 @@ namespace scsp.Controllers
             catch(Exception e){
                 Console.WriteLine("Invalid");
                 Console.WriteLine(e);
-                return Register("Error occured while registering");
+                return Error("Registration Error", "Error occured while registering");
             }
         }
 
@@ -100,7 +117,7 @@ namespace scsp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Login(string username, string password)
+        public async Task<IActionResult> Login(string username, string password)
         {
             if(username == null)   return Login("Username cannot be empty");
             if(password == null)   return Login("Password cannot be empty");
@@ -122,15 +139,23 @@ namespace scsp.Controllers
                     return Login("Incorrect Username or Password");
                 }
                 else{
-                    return Login("Login Successful");
+                    var claims = new List<Claim>{ new Claim(ClaimTypes.Name, username) };
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var authProperties = new AuthenticationProperties{ AllowRefresh = true, IsPersistent = true, ExpiresUtc = DateTime.UtcNow.AddMinutes(2) };
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,new ClaimsPrincipal(claimsIdentity),authProperties);
+                    return RedirectToAction("Index","Home");
                 }
                 
             }
             catch(Exception e){
                 Console.WriteLine("Invalid");
                 Console.WriteLine(e);
-                return Login("Error occured while loging in");
+                return Error("Login Error", "Error occured while loging in");
             }
+        }
+        public async Task<IActionResult> Logout(){
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index");
         }
     }
 }

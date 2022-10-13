@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,10 @@ builder.Services.AddDbContext<SCSPDataContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => {
+    options.LoginPath = "/Authentication/Login";
+});
+builder.Services.AddMvc();
 
 var app = builder.Build();
 
@@ -20,9 +25,17 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseAuthentication();
+
 app.UseRouting();
 
 app.UseAuthorization();
+
+var cookiePolicyOptions = new CookiePolicyOptions{
+    MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.Lax
+};
+
+app.UseCookiePolicy(cookiePolicyOptions);
 
 app.MapControllerRoute(
     name: "default",

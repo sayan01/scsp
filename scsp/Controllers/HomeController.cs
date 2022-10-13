@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using scsp.Models;
 
@@ -12,9 +13,12 @@ public class HomeController : Controller
     {
         _logger = logger;
     }
-
+    [Authorize]
     public IActionResult Index()
     {
+        var identity = HttpContext.User.Identity;
+        var name = identity != null ? identity.Name : "no user signed in";
+        Console.WriteLine(name);
         return View();
     }
 

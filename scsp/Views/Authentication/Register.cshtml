@@ -1,7 +1,7 @@
-@model scsp.Models.User
+@model scsp.ViewModels.AuthRegisterViewModel
 
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = Model.Title;
 }
 
 @section Styles {
@@ -14,10 +14,9 @@
     <h1 class="display-5">Register</h1>
     @if (@ViewData["message"] != null)
     {
-        string? alert = (String?)ViewData["alert"];
-        alert = alert!=null ? alert : "danger";
+        string alert = @Model.AlertType;
         <div class="alert alert-@alert alert-dismissible fade show" role="alert">
-            <h5>@ViewData["message"]</h5>
+            <h5>@Model.AlertMsg</h5>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
@@ -27,27 +26,27 @@
     <div class="col-md-4">
         <form asp-action="Register" id="register-form">
             <div class="form-group">
-                <label asp-for="UserID" class="control-label">Username</label>
+                <label asp-for="User.UserID" class="control-label">Username</label>
                 <span class="text text-danger">*</span>
-                <input class="form-control" required maxlength="32" minlength="1" name="username" id="username"/>
+                <input asp-for="User.UserID" class="form-control" required maxlength="32" minlength="1" name="username" id="username"/>
             </div>
             <div class="form-group">
-                <label class="control-label">Password</label>
+                <label asp-for="password" class="control-label">Password</label>
                 <span class="text text-danger">*</span>
-                <input class="form-control" type="password" required minlength="8" name="password" id="password"/>
+                <input asp-for="password" class="form-control" type="password" required minlength="8" name="password" id="password"/>
             </div>
             <div class="form-group">
-                <label asp-for="FName" class="control-label">First Name</label>
+                <label asp-for="User.FName" class="control-label">First Name</label>
                 <span class="text text-danger">*</span>
-                <input class="form-control" required maxlength="32" name="fname" id="fname"/>
+                <input asp-for="User.FName" class="form-control" required maxlength="32" name="FName" id="FName"/>
             </div>
             <div class="form-group">
-                <label asp-for="LName" class="control-label">Last Name</label>
-                <input class="form-control" maxlength="32" name="lname" id="lname"/>
+                <label asp-for="User.LName" class="control-label">Last Name</label>
+                <input asp-for="User.LName" class="form-control" maxlength="32" name="LName" id="LName"/>
             </div>
             <div class="form-group">
-                <label asp-for="Bio" class="control-label"></label>
-                <textarea class="form-control" type="text" maxlength="250" form="register-form" name="bio" id="bio"></textarea>
+                <label asp-for="User.Bio" class="control-label"></label>
+                <textarea asp-for="User.Bio" class="form-control" type="text" maxlength="250" form="register-form" name="Bio" id="Bio"></textarea>
             </div>
             <br>
             <div class="form-group">
