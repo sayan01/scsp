@@ -33,17 +33,17 @@
                 <p class="lead fw-normal mb-1">Edit Profile</p>
                 <div class="form-group">
                     <label asp-for="currentuser.FName" class="control-label">First Name</label>
-                    <input asp-for="currentuser.FName" placeholder="First Name" class="form-control" name="fname" id="fname" />
+                    <input asp-for="currentuser.FName" placeholder="First Name" class="form-control" name="fname" id="fname" required maxlength="32"/>
                     <span asp-validation-for="currentuser.FName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="currentuser.LName" class="control-label">Last Name</label>
-                    <input asp-for="currentuser.LName" placeholder="Last Name" class="form-control" name="lname" id="lname" />
+                    <input asp-for="currentuser.LName" placeholder="Last Name" class="form-control" name="lname" id="lname" maxlength="32" />
                     <span asp-validation-for="currentuser.LName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="currentuser.Bio" class="control-label"></label>
-                    <textarea asp-for="currentuser.Bio" placeholder="Bio" class="form-control" name="bio" id="bio" ></textarea>
+                    <textarea asp-for="currentuser.Bio" placeholder="Bio" class="form-control" name="bio" id="bio" maxlength="250"></textarea>
                     <span asp-validation-for="currentuser.Bio" class="text-danger"></span>
                 </div>
                 <br>

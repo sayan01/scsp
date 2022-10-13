@@ -24,12 +24,11 @@ public class ProfileController : Controller
     {
         var identity = HttpContext.User.Identity;
         var username = identity != null ? identity.Name : null;
-        Console.WriteLine(username);
         var user = _context.User.FirstOrDefault(m => m.UserID == username);
         if(user == null){
             return RedirectToAction("Logout", "Authentication");
         }
-        var posts = _context.Post.Where(p => p.Author == user).ToList();
+        var posts = _context.Post.Where(p => p.Author == user).OrderBy(post => post.Time).Reverse().ToList();
         ProfileIndexViewModel vm = new ProfileIndexViewModel{
             currentuser = user,
             Posts = posts,
@@ -60,6 +59,7 @@ public class ProfileController : Controller
         // POST: User/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string username, string fname, string lname, string bio)

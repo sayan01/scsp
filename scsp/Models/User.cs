@@ -22,23 +22,23 @@ namespace scsp.Models
         public Photo? Photo {get; set; }
 
         // foreign key to user table (follows)
-        public ICollection<User>? Follows {get; set;}
+        public ICollection<User> Follows {get; set;} = new List<User>();
         [InverseProperty("Follows")]
-        public ICollection<User>? FollowedBy {get; set;}
+        public ICollection<User> FollowedBy {get; set;} = new List<User>();
 
         // posts created by user
         [InverseProperty("Author")]
-        public ICollection<Post>? Posts {get; set;}
+        public ICollection<Post> Posts {get; set;} = new List<Post>();
 
         // donations made by user
         [InverseProperty("User")]
-        public ICollection<Donation>? Donations {get; set;}
+        public ICollection<Donation> Donations {get; set;} = new List<Donation>();
 
         //messages
         [InverseProperty("From")]
-        public ICollection<Message>? MessagesSent {get; set;}
+        public ICollection<Message> MessagesSent {get; set;} = new List<Message>();
 
         [InverseProperty("To")]
-        public ICollection<Message>? MessagesRecieved {get; set;}
+        public ICollection<Message> MessagesRecieved {get; set;} = new List<Message>();
     }
 }

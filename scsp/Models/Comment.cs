@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace scsp.Models
 {
@@ -18,5 +19,10 @@ namespace scsp.Models
         public string Content {get; set;} = "";
         [Required] [DataType(DataType.Date)]
         public DateTime Time {get; set; } = new DateTime();
+
+        [InverseProperty("Comment")]
+        public ICollection<LikeComment> Likes {get; set;} = new List<LikeComment>();
+        [InverseProperty("Comment")]
+        public ICollection<DislikeComment> Dislikes {get; set;} = new List<DislikeComment>();
     }
 }

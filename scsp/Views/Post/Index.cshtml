@@ -13,22 +13,34 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.PostID)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Content)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Time)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Author)
+            </th>
+            <th>Options</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.PostID)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Content)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Time)
+            </td>
+            <td>
+                @item.Author.UserID
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PostID">Edit</a> |

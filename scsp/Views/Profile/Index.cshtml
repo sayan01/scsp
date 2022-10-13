@@ -60,7 +60,7 @@
             </div>
             <div class="d-flex justify-content-between align-items-center mb-4">
               <p class="lead fw-normal mb-0">Posts</p>
-              <p class="mb-0"><a href="#!" class="text-muted">Show all</a></p>
+              <p class="mb-0"><a asp-action="Create" asp-controller="Post" class="btn btn-outline-dark"><i class="fa-solid fa-plus"></i> New Post</a></p>
             </div>
             @for (int i = 0; i < ( @Model.Posts.Count + 1 ) / 2; i++){
               <div class="row g-2 mb-2">

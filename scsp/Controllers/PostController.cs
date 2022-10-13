@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using scsp.Models;
+using scsp.ViewModels;
 
 namespace scsp.Controllers
 {
@@ -45,6 +47,7 @@ namespace scsp.Controllers
         }
 
         // GET: Post/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -53,17 +56,32 @@ namespace scsp.Controllers
         // POST: Post/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PostID,Content,Time")] Post post)
+        public async Task<IActionResult> Create(string content)
         {
-            if (ModelState.IsValid)
-            {
+            if(String.IsNullOrEmpty(content)){
+                
+            }
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : null;
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(user == null){
+                return RedirectToAction("Logout", "Authentication");
+            }
+            Post post = new Post();
+            post.Content = content;
+            post.Author = user;
+            post.Time = DateTime.Now;
+            try{
                 _context.Add(post);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index),"Home");
+            }catch (Exception e){
+                Console.WriteLine(e);
+                return RedirectToAction(nameof(Index), "Home");
             }
-            return View(post);
         }
 
         // GET: Post/Edit/5
