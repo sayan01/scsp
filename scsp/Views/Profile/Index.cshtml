@@ -65,18 +65,25 @@
             @for (int i = 0; i < ( @Model.Posts.Count + 1 ) / 2; i++){
               <div class="row g-2 mb-2">
                 @for (int j = 0; j < 2 && i*2 + j < @Model.Posts.Count; j++){
+                  var Post = Model.Posts.ToList()[i*2+j];
                   <div class="col">
                     <div class="card">
-                      @* <img src="..." class="card-img-top" alt="..."> *@
+                      @if (String.IsNullOrEmpty(Post.Photo))
+                      {
+                        <img src="data:image/jpg;base64,@Post.Photo" class="card-img-top" alt="photo">
+                      }
                       <div class="card-body">
                         @* <h5 class="card-title">Card title</h5> *@
-                        <p class="card-text">@Model.Posts.ToList()[i*2 + j].Content</p>
+                        <p class="card-text">@Post.Content</p>
                         @* <a href="#" class="btn btn-primary">Go somewhere</a> *@
                       </div>
                       <div class="card-footer">
-                        <i class="fa-solid fa-thumbs-up"></i> 12 &nbsp; &nbsp;
-                        <i class="fa-solid fa-thumbs-down"></i> 2 &nbsp; &nbsp;
-                        <i class="fa-solid fa-comment"></i> 5 &nbsp; &nbsp;
+                        <i class="fa-solid fa-thumbs-up"></i> @Post.Likes.Count &nbsp; &nbsp;
+                        <i class="fa-solid fa-thumbs-down"></i> @Post.Dislikes.Count &nbsp; &nbsp;
+                        <i class="fa-solid fa-comment"></i> @Post.Dislikes.Count &nbsp; &nbsp;
+                      </div>
+                      <div class="card-footer">
+                        Posted on: @Post.Time by @Post.Author.FName
                       </div>
                     </div>
                   </div>

@@ -1,21 +1,32 @@
-@model scsp.Models.Post
-
+@model scsp.ViewModels.PostCreateViewModel
 @{
     ViewData["Title"] = "Create";
 }
 
 <h1>Create</h1>
-
 <h4>Post</h4>
+@if (!String.IsNullOrEmpty(@Model.AlertMsg))
+{
+    string alert = @Model.AlertType;
+    <div class="alert alert-@alert alert-dismissible fade show" role="alert">
+        <h5>@Model.AlertMsg</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form method="post" asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Content" class="control-label"></label>
-                <textarea asp-for="Content" class="form-control" name="content" id="content" maxlength="250"> </textarea>
-                <span asp-validation-for="Content" class="text-danger"></span>
+                <label class="control-label">Enter the content of your post</label>
+                <textarea class="form-control" name="content" id="content" required maxlength="250">@Model.Content</textarea>
+                <span class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Upload photo if any</label>
+                <input class="form-control" type="file" name="file" id="file" />
+                <span class="text-danger"></span>
             </div>
             <br>
             <span class="form-group">

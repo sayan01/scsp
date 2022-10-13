@@ -17,9 +17,7 @@ namespace scsp.Models
         public string FName {get; set;} = "";
         public string? LName {get; set;} = "";
         public string? Bio {get; set;} = "";
-        
-        // foreign key to photo table
-        public Photo? Photo {get; set; }
+        public string Photo {get; set; } = "";
 
         // foreign key to user table (follows)
         public ICollection<User> Follows {get; set;} = new List<User>();

@@ -29,6 +29,13 @@ public class ProfileController : Controller
             return RedirectToAction("Logout", "Authentication");
         }
         var posts = _context.Post.Where(p => p.Author == user).OrderBy(post => post.Time).Reverse().ToList();
+        foreach (var post in posts)
+        {
+            post.Likes = _context.LikePost.Where(l => l.Post == post).ToList();
+            post.Dislikes = _context.DislikePost.Where(d => d.Post == post).ToList();
+            post.Comments = _context.Comment.Where(c => c.Post == post).ToList();
+            
+        }
         ProfileIndexViewModel vm = new ProfileIndexViewModel{
             currentuser = user,
             Posts = posts,

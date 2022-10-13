@@ -48,9 +48,13 @@ namespace scsp.Controllers
 
         // GET: Post/Create
         [Authorize]
-        public IActionResult Create()
+        public IActionResult Create(string message, string alert = "danger")
         {
-            return View();
+            PostCreateViewModel vm = new PostCreateViewModel(){
+                AlertMsg = message,
+                AlertType = alert,
+            };
+            return View(vm);
         }
 
         // POST: Post/Create
@@ -59,10 +63,18 @@ namespace scsp.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(string content)
+        public async Task<IActionResult> Create(string content, IFormFile file)
         {
             if(String.IsNullOrEmpty(content)){
-                
+                return Create("Content cannot be empty");
+            }
+            string photo = "";
+            if(file != null && file.Length > 0){
+                using(var target = new MemoryStream()){
+                    file.CopyTo(target);
+                    var barray = target.ToArray();
+                    photo = Convert.ToBase64String(barray);
+                }
             }
             var identity = HttpContext.User.Identity;
             var username = identity != null ? identity.Name : null;
@@ -70,17 +82,23 @@ namespace scsp.Controllers
             if(user == null){
                 return RedirectToAction("Logout", "Authentication");
             }
-            Post post = new Post();
-            post.Content = content;
-            post.Author = user;
-            post.Time = DateTime.Now;
+            Post post = new Post{
+                Content = content,
+                Author = user,
+                Time = DateTime.Now,
+                Photo = photo
+            };
             try{
                 _context.Add(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index),"Home");
             }catch (Exception e){
                 Console.WriteLine(e);
-                return RedirectToAction(nameof(Index), "Home");
+                PostCreateViewModel vm = new PostCreateViewModel{
+                    AlertMsg = "Something Went Wrong\n" + e.Message,
+                    Content = content
+                };
+                return View(vm);
             }
         }
 

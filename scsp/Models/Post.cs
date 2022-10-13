@@ -24,9 +24,10 @@ namespace scsp.Models
         public User Author {get; set;} = new User();
 
         // photo
-        public Photo? Photo {get; set;}
+        public string Photo {get; set;} = "";
 
         // comments
+        [InverseProperty("Post")]
         public ICollection<Comment> Comments {get; set;} = new List<Comment>();
 
 

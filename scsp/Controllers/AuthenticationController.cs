@@ -30,32 +30,25 @@ namespace scsp.Controllers
         }
         public IActionResult Login(string message = "")
         {
-            AuthLoginViewModel authLoginViewModel = new AuthLoginViewModel(){
+            AuthLoginViewModel vm = new AuthLoginViewModel(){
                 Title = "Login",
                 AlertMsg = message,
                 AlertType = "danger",
                 password = "",
                 User = new User()
             };
-            if (message != null){
-                ViewData["message"] = message;
-            }
-            return View(authLoginViewModel);
+            return View(vm);
         }
         public IActionResult Register(string message, string alert = "danger")
         {
-            AuthRegisterViewModel AuthRegisterViewModel = new AuthRegisterViewModel(){
+            AuthRegisterViewModel vm = new AuthRegisterViewModel(){
                 Title = "Register",
                 AlertMsg = message,
                 AlertType = alert,
                 password = "",
                 User = new User()
             };
-            if (message != null){
-                ViewData["message"] = message;
-                ViewData["alert"] = alert;
-            }
-            return View(AuthRegisterViewModel);
+            return View(vm);
         }
         public IActionResult Error(string title, string details)
         {
@@ -81,8 +74,8 @@ namespace scsp.Controllers
 
             user.UserID = username;
             user.FName = fname;
-            user.LName = lname;
-            user.Bio = bio;
+            user.LName = lname ?? "";
+            user.Bio = bio ?? "";
             user.FollowedBy = new List<User>();
             user.Follows = new List<User>();
             user.Posts = new List<Post>();
@@ -94,7 +87,7 @@ namespace scsp.Controllers
             byte[] result;
             SHA512 shaM = SHA512.Create();
             result = shaM.ComputeHash(passwordbytes);
-            string passwordhash = System.Text.Encoding.ASCII.GetString(result);
+            string passwordhash = Convert.ToBase64String(result);
 
             user.PasswordHash = passwordhash;
 
@@ -135,7 +128,7 @@ namespace scsp.Controllers
                 byte[] result;
                 SHA512 shaM = SHA512.Create();
                 result = shaM.ComputeHash(passwordbytes);
-                passwordhash = System.Text.Encoding.ASCII.GetString(result);
+                passwordhash = Convert.ToBase64String(result);
             }
 
             try

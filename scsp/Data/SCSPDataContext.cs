@@ -11,8 +11,6 @@ using scsp.Models;
         {
         }
 
-        public DbSet<scsp.Models.Photo> Photo { get; set; } = default!;
-
         public DbSet<scsp.Models.User> User { get; set; } = default!;
 
         public DbSet<scsp.Models.Post> Post { get; set; } = default!;
@@ -22,4 +20,12 @@ using scsp.Models;
         public DbSet<scsp.Models.Donation> Donation { get; set; } = default!;
 
         public DbSet<scsp.Models.Comment> Comment { get; set; } = default!;
+        
+        public DbSet<scsp.Models.LikePost> LikePost { get; set; } = default!;
+        
+        public DbSet<scsp.Models.DislikePost> DislikePost { get; set; } = default!;
+        
+        public DbSet<scsp.Models.LikeComment> LikeComment { get; set; } = default!;
+        
+        public DbSet<scsp.Models.DislikeComment> DislikeComment { get; set; } = default!;
     }
