@@ -76,12 +76,12 @@ namespace scsp.Controllers
             user.FName = fname;
             user.LName = lname ?? "";
             user.Bio = bio ?? "";
-            user.FollowedBy = new List<User>();
-            user.Follows = new List<User>();
-            user.Posts = new List<Post>();
-            user.Donations = new List<Donation>();
-            user.MessagesSent = new List<Message>();
-            user.MessagesRecieved = new List<Message>();
+            // user.FollowedBy = new List<Relation>();
+            // user.Follows = new List<Relation>();
+            // user.Posts = new List<Post>();
+            // user.Donations = new List<Donation>();
+            // user.MessagesSent = new List<Message>();
+            // user.MessagesRecieved = new List<Message>();
 
             byte[] passwordbytes = System.Text.Encoding.UTF8.GetBytes(username + password);
             byte[] result;

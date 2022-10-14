@@ -38,8 +38,8 @@ public class ProfileController : Controller
         ProfileIndexViewModel vm = new ProfileIndexViewModel{
             currentuser = user,
             Posts = posts,
-            Followers = user.Follows ?? new List<User>(),
-            Following = user.FollowedBy ?? new List<User>(),
+            Followers = user.Follows,
+            Following = user.FollowedBy,
         };
         return View(vm);
     }
@@ -66,8 +66,8 @@ public class ProfileController : Controller
         ProfileExploreViewModel vm = new ProfileExploreViewModel{
             user = user,
             Posts = posts,
-            Followers = user.Follows ?? new List<User>(),
-            Following = user.FollowedBy ?? new List<User>(),
+            Followers = user.Follows ,
+            Following = user.FollowedBy ,
         };
         return View(vm);
     }
@@ -183,8 +183,8 @@ public class ProfileController : Controller
             if(cuser == user){
                 return Content("Cannot follow ownself");
             }
-            cuser.Follows.Add(user);
-            user.FollowedBy.Add(cuser);
+            cuser.Follows.Add(new Relation{FromId=cusername, ToId=username});
+            user.FollowedBy.Add(new Relation{FromId=username, ToId=cusername});
             try{
                 _context.Update(user);
                 _context.Update(cuser);

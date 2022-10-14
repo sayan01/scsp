@@ -20,9 +20,8 @@ namespace scsp.Models
         public string Photo {get; set; } = "";
 
         // foreign key to user table (follows)
-        public ICollection<User> Follows {get; set;}
-        [InverseProperty("Follows")]
-        public ICollection<User> FollowedBy {get; set;}
+        public virtual ICollection<Relation> Follows {get; set;}
+        public virtual ICollection<Relation> FollowedBy {get; set;}
 
         // posts created by user
         [InverseProperty("Author")]
@@ -38,5 +37,13 @@ namespace scsp.Models
 
         [InverseProperty("To")]
         public ICollection<Message> MessagesRecieved {get; set;} = new List<Message>();
+    }
+
+    public class Relation{
+        public string FromId { get; set; }
+        public string ToId { get; set; }
+
+        public virtual User UserFrom { get; set; }
+        public virtual User UserTo { get; set; }
     }
 }
