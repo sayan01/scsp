@@ -22,7 +22,7 @@ namespace scsp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AuthorUserID")
+                    b.Property<string>("AuthorId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -38,7 +38,7 @@ namespace scsp.Migrations
 
                     b.HasKey("CommentID");
 
-                    b.HasIndex("AuthorUserID");
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("PostID");
 
@@ -51,7 +51,7 @@ namespace scsp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AuthorUserID")
+                    b.Property<string>("AuthorId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -60,7 +60,7 @@ namespace scsp.Migrations
 
                     b.HasKey("DislikeID");
 
-                    b.HasIndex("AuthorUserID");
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("CommentID");
 
@@ -73,7 +73,7 @@ namespace scsp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AuthorUserID")
+                    b.Property<string>("AuthorId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -82,7 +82,7 @@ namespace scsp.Migrations
 
                     b.HasKey("DislikeID");
 
-                    b.HasIndex("AuthorUserID");
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("PostID");
 
@@ -141,7 +141,7 @@ namespace scsp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AuthorUserID")
+                    b.Property<string>("AuthorId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -150,7 +150,7 @@ namespace scsp.Migrations
 
                     b.HasKey("LikeID");
 
-                    b.HasIndex("AuthorUserID");
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("CommentID");
 
@@ -163,7 +163,7 @@ namespace scsp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AuthorUserID")
+                    b.Property<string>("AuthorId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -172,7 +172,7 @@ namespace scsp.Migrations
 
                     b.HasKey("LikeID");
 
-                    b.HasIndex("AuthorUserID");
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("PostID");
 
@@ -269,7 +269,7 @@ namespace scsp.Migrations
                 {
                     b.HasOne("scsp.Models.User", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorUserID")
+                        .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -288,7 +288,7 @@ namespace scsp.Migrations
                 {
                     b.HasOne("scsp.Models.User", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorUserID")
+                        .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -307,7 +307,7 @@ namespace scsp.Migrations
                 {
                     b.HasOne("scsp.Models.User", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorUserID")
+                        .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -356,7 +356,7 @@ namespace scsp.Migrations
                 {
                     b.HasOne("scsp.Models.User", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorUserID")
+                        .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -375,7 +375,7 @@ namespace scsp.Migrations
                 {
                     b.HasOne("scsp.Models.User", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorUserID")
+                        .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

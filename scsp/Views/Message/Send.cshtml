@@ -8,14 +8,6 @@
     var to = @Model.to;
     ViewData["Title"] = "Chat - " + to.UserID;
 }
-@if (!String.IsNullOrEmpty(@Model.errormsg))
-{
-    string alert = "danger";
-    <div class="alert alert-@alert alert-dismissible fade show" role="alert">
-        <h5>@Model.errormsg</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
 <a asp-action="Index" class="btn btn-outline-dark">&lt; Inbox</a>
 <h1>Chat with @to.UserID</h1>
 <hr />
@@ -34,15 +26,33 @@
         </div>
     </div>
 }
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Send">
-            <div class="form-group">
-                <input class="form-control" name="message" id="message"/>
+<form asp-action="Send" class="">
+    <div class="bottom fixed-bottom">
+        @if (!String.IsNullOrEmpty(@Model.errormsg)){
+            string alert = "danger";
+            <div class="alert alert-@alert alert-dismissible fade show" role="alert">
+                <h5>@Model.errormsg</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Send" class="btn btn-outline-primary" />
-            </div>
-        </form>
+        }
+        <div class="input-group pb-3 pt-3 container sendtext">
+            <input class="form-control rounded" placeholder="Send a message..." name="message" id="message" autocomplete="off"/>
+            <button type="submit" value="Send" class="btn btn-primary">Send <i class="fas fa-paper-plane"></i></button>
+        </div>
     </div>
-</div>
+</form>
+
+@section Styles{
+    <style>
+        .sendtext{
+            min-height: 60px;
+        }
+        .footer{
+            display: none;
+        }
+        .bottom{
+            background-color: var(--bs-light);
+            border-top: 1px solid var(--bs-gray-500);
+        }
+    </style>
+}

@@ -45,25 +45,43 @@ namespace scsp.Controllers
         }
 
         // GET: Comment/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+        // public IActionResult Create()
+        // {
+        //     return View();
+        // }
 
         // POST: Comment/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CommentID,Content,Time")] Comment comment)
+        public async Task<IActionResult> Create(int id, string comment)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(comment);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+            if(String.IsNullOrEmpty(comment)){
+                return Content("Comment cannot be empty");
             }
-            return View(comment);
+            if(comment.Length > 250){
+                return Content("Comment cannot be longer than 250 characters");
+            }
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : null;
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(user == null){
+                return RedirectToAction("Logout", "Authentication");
+            }
+            var post = _context.Post.FirstOrDefault(p => p.PostID == id);
+            if(post == null){
+                return Content("Post does not exist");
+            }
+            var Comment = new Comment{
+                Post = post,
+                Content = comment,
+                Author = user,
+                Time = DateTime.Now
+            };
+            _context.Add(Comment);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details), "Post", new {id = id});
         }
 
         // GET: Comment/Edit/5

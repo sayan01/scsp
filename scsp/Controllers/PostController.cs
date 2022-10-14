@@ -38,11 +38,11 @@ namespace scsp.Controllers
 
             var post = await _context.Post
                 .FirstOrDefaultAsync(m => m.PostID == id);
-            if (post == null)
-            {
-                return NotFound();
+            if(post == null){
+                return Content("Post does not exist");
             }
-
+            post.Author = _context.User.FirstOrDefault(u => u.UserID == post.AuthorId) ?? new User();
+            post.Comments = _context.Comment.Where(c => c.Post == post).ToList() ?? new List<Comment>();
             return View(post);
         }
 

@@ -11,6 +11,10 @@ namespace scsp.Models
     {
         [Key] [Required]
         public int CommentID {get; set;}
+
+        // foreign key
+        [ForeignKey("Author")]
+        public string AuthorId {get; set;} = "";
         [Required]
         public User Author {get; set; } = new User();
         [Required]
