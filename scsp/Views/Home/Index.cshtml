@@ -1,6 +1,7 @@
 ﻿@model scsp.ViewModels.HomeIndexViewModel
 @{
     ViewData["Title"] = "Home";
+    var Posts = @Model.Posts;
 }
 
 @section Styles {
@@ -14,22 +15,26 @@
     <br>
     <a class="btn btn-outline-primary" asp-action="Create" asp-controller="Post"><i class="fa-solid fa-plus"></i> New Post</a>
     <br><hr><br>
-    @for(var i = 0; i < 6; i++)
+    @foreach (var Post in @Posts)
         {
-            <div class="card mt-5 mb-5 pt-3 pb-3">
-                <div class="card-body">
-                    <h5 class="card-title mt-3 mb-3">Post @i</h5>
-                    <p class="card-text mt-3 mb-3">Some quick example text to build on the card title and make up the bulk of the card content.</p>
-                    <a href="#" class="btn btn-primary">
-                    <i class="fa-solid fa-thumbs-up"></i>
-                    Like</a>
-                    <a href="#" class="btn btn-primary">
-                    <i class="fa-solid fa-thumbs-down"></i>
-                    Dislike</a>
-                    <a href="#" class="btn btn-primary">
-                    <i class="fa-regular fa-comment"></i>
-                    Comment</a>
-                </div>
-            </div>
+            <div class="card">
+                      @if (!String.IsNullOrEmpty(Post.Photo))
+                      {
+                        <img src="data:image;base64,@Post.Photo" class="card-img-top" alt="photo">
+                      }
+                      <div class="card-body">
+                        @* <h5 class="card-title">Card title</h5> *@
+                        <p class="card-text">@Post.Content</p>
+                        @* <a href="#" class="btn btn-primary">Go somewhere</a> *@
+                      </div>
+                      <div class="card-footer">
+                        <i class="fa-solid fa-thumbs-up"></i> @Post.Likes.Count &nbsp; &nbsp;
+                        <i class="fa-solid fa-thumbs-down"></i> @Post.Dislikes.Count &nbsp; &nbsp;
+                        <i class="fa-solid fa-comment"></i> @Post.Dislikes.Count &nbsp; &nbsp;
+                      </div>
+                      <div class="card-footer">
+                        Posted on: @Post.Time by @Post.Author.FName @Post.Author.LName
+                      </div>
+                    </div>
         }
 </div>

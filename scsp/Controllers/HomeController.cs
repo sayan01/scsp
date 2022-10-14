@@ -27,8 +27,26 @@ public class HomeController : Controller
         if(user == null){
             return RedirectToAction("Logout", "Authentication");
         }
+        var followers = _context.UserUser.Where(uu => uu.Followee == user).ToList();
+        var following = _context.UserUser.Where(uu => uu.Follower == user).ToList();
+        var posts = _context.Post.ToList();
+        var frndposts = new List<Post>();
+        foreach (var post in posts)
+        {
+            foreach (var frnd in following)
+            {
+                if(post.AuthorId == frnd.FolloweeId){
+                    post.Author = _context.User.FirstOrDefault(u => u.UserID == post.AuthorId) ?? post.Author;
+                    frndposts.Add(post);
+                    break;
+                }
+            }
+        }
         HomeIndexViewModel vm = new HomeIndexViewModel{
-            currentuser = user == null ? new User(): user
+            currentuser = user,
+            Followers = followers,
+            Following = following,
+            Posts = frndposts
         };
         return View(vm);
     }

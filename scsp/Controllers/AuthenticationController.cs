@@ -76,8 +76,8 @@ namespace scsp.Controllers
             user.FName = fname;
             user.LName = lname ?? "";
             user.Bio = bio ?? "";
-            user.FollowedBy = new List<User>();
-            user.Follows = new List<User>();
+            user.Follows = new List<Foll>();
+            user.FollowedBy = new List<Foll>();
             user.Posts = new List<Post>();
             user.Donations = new List<Donation>();
             user.MessagesSent = new List<Message>();

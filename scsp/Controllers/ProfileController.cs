@@ -35,11 +35,13 @@ public class ProfileController : Controller
             post.Dislikes = _context.DislikePost.Where(d => d.Post == post).ToList();
             post.Comments = _context.Comment.Where(c => c.Post == post).ToList();
         }
+        var followers = _context.UserUser.Where(uu => uu.Followee == user).ToList();
+        var following = _context.UserUser.Where(uu => uu.Follower == user).ToList();
         ProfileIndexViewModel vm = new ProfileIndexViewModel{
             currentuser = user,
             Posts = posts,
-            Followers = user.Follows ?? new List<User>(),
-            Following = user.FollowedBy ?? new List<User>(),
+            Followers = followers,
+            Following = following,
         };
         return View(vm);
     }
@@ -57,6 +59,8 @@ public class ProfileController : Controller
             return Content("User (" + username + ") not found");
         }
         var posts = _context.Post.Where(p => p.Author == user).OrderBy(post => post.Time).Reverse().ToList();
+        var followers = _context.UserUser.Where(uu => uu.Followee == user).ToList();
+        var following = _context.UserUser.Where(uu => uu.Follower == user).ToList();
         foreach (var post in posts)
         {
             post.Likes = _context.LikePost.Where(l => l.Post == post).ToList();
@@ -66,8 +70,8 @@ public class ProfileController : Controller
         ProfileExploreViewModel vm = new ProfileExploreViewModel{
             user = user,
             Posts = posts,
-            Followers = user.Follows ?? new List<User>(),
-            Following = user.FollowedBy ?? new List<User>(),
+            Followers = followers,
+            Following = following,
         };
         return View(vm);
     }
@@ -171,7 +175,8 @@ public class ProfileController : Controller
         {
             var username = id;
             var identity = HttpContext.User.Identity;
-            var cusername = identity != null ? identity.Name : null;
+            var cusername = identity != null ? identity.Name : "";
+            cusername ??= "";
             var user = await _context.User.FirstOrDefaultAsync(e => e.UserID == username);
             var cuser = await _context.User.FirstOrDefaultAsync(e => e.UserID == cusername);
             if (cuser == null){
@@ -183,8 +188,9 @@ public class ProfileController : Controller
             if(cuser == user){
                 return Content("Cannot follow ownself");
             }
-            cuser.Follows.Add(user);
-            user.FollowedBy.Add(cuser);
+            Foll relation = new Foll{Follower = cuser, Followee = user};
+            cuser.Follows.Add(relation);
+            user.FollowedBy.Add(relation);
             try{
                 _context.Update(user);
                 _context.Update(cuser);

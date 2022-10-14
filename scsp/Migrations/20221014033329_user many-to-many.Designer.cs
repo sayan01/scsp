@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace scsp.Migrations
 {
     [DbContext(typeof(SCSPDataContext))]
-    partial class SCSPDataContextModelSnapshot : ModelSnapshot
+    [Migration("20221014033329_user many-to-many")]
+    partial class usermanytomany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.9");
@@ -215,7 +217,7 @@ namespace scsp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AuthorId")
+                    b.Property<string>("AuthorUserID")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -232,7 +234,7 @@ namespace scsp.Migrations
 
                     b.HasKey("PostID");
 
-                    b.HasIndex("AuthorId");
+                    b.HasIndex("AuthorUserID");
 
                     b.ToTable("Post");
                 });
@@ -413,7 +415,7 @@ namespace scsp.Migrations
                 {
                     b.HasOne("scsp.Models.User", "Author")
                         .WithMany("Posts")
-                        .HasForeignKey("AuthorId")
+                        .HasForeignKey("AuthorUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

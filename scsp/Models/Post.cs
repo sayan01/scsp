@@ -19,6 +19,8 @@ namespace scsp.Models
 
 
         // foreign key
+        [ForeignKey("Author")]
+        public string AuthorId {get; set;} = "";
         // user(author)
         [Required]
         public User Author {get; set;} = new User();

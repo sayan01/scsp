@@ -9,7 +9,7 @@ namespace scsp.ViewModels
     {
         public User user {get; set;} = new User();
         public ICollection<Post> Posts {get; set;} = new List<Post>();
-        public ICollection<User> Followers {get; set;} = new List<User>();
-        public ICollection<User> Following {get; set;} = new List<User>();
+        public ICollection<Foll> Followers {get; set;} = new List<Foll>();
+        public ICollection<Foll> Following {get; set;} = new List<Foll>();
     }
 }

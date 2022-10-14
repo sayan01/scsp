@@ -20,9 +20,11 @@ namespace scsp.Models
         public string Photo {get; set; } = "";
 
         // foreign key to user table (follows)
-        public ICollection<User> Follows {get; set;}
-        [InverseProperty("Follows")]
-        public ICollection<User> FollowedBy {get; set;}
+        [InverseProperty("Follower")]
+
+        public ICollection<Foll> Follows {get; set;} = new List<Foll>();
+        [InverseProperty("Followee")]
+        public ICollection<Foll> FollowedBy {get; set;} = new List<Foll>();
 
         // posts created by user
         [InverseProperty("Author")]
