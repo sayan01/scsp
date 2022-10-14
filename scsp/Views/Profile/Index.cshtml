@@ -1,12 +1,13 @@
 @model scsp.ViewModels.ProfileIndexViewModel
 @{
     ViewData["Title"] = "Profile";
-    string username = @Model.currentuser.UserID;
-    string fname = @Model.currentuser.FName;
-    string lname = @Model.currentuser.LName ?? "";
-    string bio = @Model.currentuser.Bio ?? "";
+    var User = @Model.currentuser;
+    string username = @User.UserID;
+    string fname = @User.FName;
+    string lname = @User.LName ?? "";
+    string bio = @User.Bio ?? "";
     string name = fname + " " + lname;
-    string initials = fname[0] + "" + lname[0];
+    string initials = @User.FName[0] + "" + (String.IsNullOrEmpty(@User.LName) ? "" : @User.LName[0]);
     string avatardefault = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
 }
 
@@ -90,7 +91,7 @@
                         <i class="fa-solid fa-thumbs-up"></i> @Post.Likes.Count &nbsp; &nbsp;
                         <i class="fa-solid fa-thumbs-down"></i> @Post.Dislikes.Count &nbsp; &nbsp;
                         <i class="fa-solid fa-comment"></i> @Post.Dislikes.Count &nbsp; &nbsp;
-                        <a asp-action="Delete" asp-controller="Post" asp-route-id="@Post.PostID" class="btn btn-outline-dark">
+                        <a asp-action="Delete" asp-controller="Post" asp-route-id="@Post.PostID" class="btn btn-outline-danger">
                           <i class="fa-solid fa-trash"></i> 
                           Delete
                         </a>
@@ -105,6 +106,8 @@
             }
           </div>
         </div>
+        <br>
+        <a asp-action="Delete" asp-controller="User" asp-route-id="@Model.currentuser.UserID" class="btn btn-danger">Delete Account</a>
       </div>
     </div>
   </div>

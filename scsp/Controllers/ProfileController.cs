@@ -166,6 +166,35 @@ public class ProfileController : Controller
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize]
+        public async Task<IActionResult> Follow(string id)
+        {
+            var username = id;
+            var identity = HttpContext.User.Identity;
+            var cusername = identity != null ? identity.Name : null;
+            var user = await _context.User.FirstOrDefaultAsync(e => e.UserID == username);
+            var cuser = await _context.User.FirstOrDefaultAsync(e => e.UserID == cusername);
+            if (cuser == null){
+                return RedirectToAction("Logout", "Authentication");
+            }
+            if(user == null){
+                return Content("User " + username + "does not exist");
+            }
+            if(cuser == user){
+                return Content("Cannot follow ownself");
+            }
+            cuser.Follows.Add(user);
+            user.FollowedBy.Add(cuser);
+            try{
+                _context.Update(user);
+                _context.Update(cuser);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e){
+                return Content("Concurrency Exception: " + e.Message);
+            }
+            return RedirectToAction(nameof(Index));
+        }
 
 
         private bool UserExists(string id){

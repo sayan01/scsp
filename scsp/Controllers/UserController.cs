@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -117,40 +118,47 @@ namespace scsp.Controllers
         }
 
         // GET: User/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        [Authorize]
+        public IActionResult Delete(string id)
         {
             if (id == null || _context.User == null)
             {
                 return NotFound();
             }
-
-            var user = await _context.User
-                .FirstOrDefaultAsync(m => m.UserID == id);
-            if (user == null)
-            {
-                return NotFound();
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : null;
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(user == null){
+                return RedirectToAction("Logout", "Authentication");
             }
-
+            if(username != id){
+                return Content("Not Authorized to delete other users");
+            }
             return View(user);
         }
 
         // POST: User/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            if (_context.User == null)
+            if (id == null || _context.User == null)
             {
-                return Problem("Entity set 'SCSPDataContext.User'  is null.");
+                return NotFound();
             }
-            var user = await _context.User.FindAsync(id);
-            if (user != null)
-            {
-                _context.User.Remove(user);
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : null;
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(user == null){
+                return RedirectToAction("Logout", "Authentication");
             }
-            
+            if(username != id){
+                return Content("Not Authorized to delete other users");
+            }
+            _context.User.Remove(user);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Logout", "Authentication");
         }
 
         private bool UserExists(string id)

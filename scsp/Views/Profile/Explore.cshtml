@@ -1,12 +1,13 @@
 @model scsp.ViewModels.ProfileExploreViewModel
 @{
     ViewData["Title"] = "Profile";
-    string username = @Model.user.UserID;
-    string fname = @Model.user.FName;
-    string lname = @Model.user.LName ?? "";
-    string bio = @Model.user.Bio ?? "";
+    var User = @Model.user;
+    string username = @User.UserID;
+    string fname = @User.FName;
+    string lname = @User.LName ?? "";
+    string bio = @User.Bio ?? "";
     string name = fname + " " + lname;
-    string initials = fname[0] + "" + lname[0];
+    string initials = @User.FName[0] + "" + (String.IsNullOrEmpty(@User.LName) ? "" : @User.LName[0]);
     string avatardefault = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
 }
 
@@ -32,7 +33,7 @@
                 alt="profile photo" class="img-fluid img-thumbnail mt-4 mb-2"
                 style="width: 150px; height: 150px; object-fit: cover; z-index: 1; border-radius: 50%">
               }
-              <a type="button" class="btn btn-outline-success" asp-action="Follow" asp-controller="User" asp-route-id="@username"
+              <a type="button" class="btn btn-outline-success" asp-action="Follow" asp-controller="Profile" asp-route-id="@username"
               style="z-index: 1;">
               Follow
               </a>
