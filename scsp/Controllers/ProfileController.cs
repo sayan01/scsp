@@ -122,7 +122,7 @@ public class ProfileController : Controller
         }
 
     [Authorize]
-    public async Task<IActionResult> UpdateDP()
+    public async Task<IActionResult> UpdateDP(string msg = "")
         {
             var identity = HttpContext.User.Identity;
             var username = identity != null ? identity.Name : null;
@@ -132,7 +132,9 @@ public class ProfileController : Controller
                 return RedirectToAction("Logout", "Authentication");
             }
             ProfileUpdateDPViewModel vm = new ProfileUpdateDPViewModel{
-                currentuser = user
+                currentuser = user,
+                AlertMsg = msg,
+                AlertType = "danger"
             };
             return View(vm);
         }
@@ -153,6 +155,10 @@ public class ProfileController : Controller
             }
             string photo = "";
             if(file != null && file.Length > 0){
+                if(file.Length > 4 * 1000 * 1000) return RedirectToAction(nameof(UpdateDP), new {msg="File is too big. Max size is 4MB"});
+                if(!file.FileName.ToLower().EndsWith(".png") && !file.FileName.ToLower().EndsWith(".jpg") )
+                    return  RedirectToAction(nameof(UpdateDP), new {msg="Only .jpg or .png files are allowed"});
+                // return RedirectToAction(nameof(UpdateDP), new {msg="Roadblock temporary"});
                 using(var target = new MemoryStream()){
                     file.CopyTo(target);
                     var barray = target.ToArray();

@@ -10,7 +10,14 @@
     string initials = fname[0] + "" + lname[0];
     string avatardefault = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
 }
-
+@if (!String.IsNullOrEmpty(@Model.AlertMsg))
+{
+    string alert = @Model.AlertType;
+    <div class="alert alert-@alert alert-dismissible fade show" role="alert">
+        <h5>@Model.AlertMsg</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 <form asp-action="UpdateDP" enctype="multipart/form-data" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="currentuser.UserID" name="username" id="username" />
@@ -24,7 +31,7 @@
                     {
                         <img src='@avatardefault'
                         alt="profile photo" class="img-fluid img-thumbnail mt-4 mb-2"
-                        style="width: 150px; z-index: 1; border-radius: 50%">
+                        style="width: 150px; height: 150px; object-fit: cover; z-index: 1; border-radius: 50%">
                     }else{
                         <img src='data:image;base64,@Model.currentuser.Photo'
                         alt="profile photo" class="img-fluid img-thumbnail mt-4 mb-2"

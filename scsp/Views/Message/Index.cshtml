@@ -16,26 +16,20 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                Username
-            </th>
-            <th>Name
-            </th>
-            <th>
-            </th>
+            <th>Username</th>
+            <th>Name</th>
+            <th>Messages</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model.Users) {
         <tr>
+            <td>@item.Key.UserID</td>
+            <td>@item.Key.FName @item.Key.LName</td>
+            <td>@item.Value</td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserID)
-            </td>
-            <td>
-                @item.FName @item.LName
-            </td>
-            <td>
-                <a asp-action="Send" asp-route-id="@item.UserID">Open</a>
+                <a asp-action="Send" asp-route-id="@item.Key.UserID">Open</a>
             </td>
         </tr>
 }

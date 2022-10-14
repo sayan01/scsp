@@ -22,6 +22,7 @@
         <th>Name</th>
         <th>Bio</th>
         <th>Open</th>
+        <th>Message</th>
         </tr>
     </thead>
     <tbody>
@@ -48,9 +49,8 @@
             <td>
                 <p class="fw-normal mb-1">@User.Bio</p>
             </td>
-            <td>
-            <a asp-action="Explore" asp-controller="Profile" asp-route-id="@User.UserID">Open</a>
-            </td>
+            <td><a asp-action="Explore" asp-controller="Profile" asp-route-id="@User.UserID"><i class="fas fa-user-circle"></i> Open</a></td>
+            <td><a asp-action="Send" asp-controller="Message" asp-route-id="@User.UserID"><i class="fas fa-comments"></i> Message</a></td>
             </tr>
         }
     </tbody>

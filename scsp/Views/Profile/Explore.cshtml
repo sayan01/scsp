@@ -33,10 +33,14 @@
                 alt="profile photo" class="img-fluid img-thumbnail mt-4 mb-2"
                 style="width: 150px; height: 150px; object-fit: cover; z-index: 1; border-radius: 50%">
               }
-              <a type="button" class="btn btn-outline-success" asp-action="Follow" asp-controller="Profile" asp-route-id="@username"
-              style="z-index: 1;">
-              Follow
+             <div class="buttons d-flex flex-row" style="z-index: 1;">
+               <a type="button" class="btn btn-outline-success me-2 d-flex flex-row align-items-center" asp-action="Follow" asp-controller="Profile" asp-route-id="@username">
+                <i class="fas fa-user-plus"></i> Follow
               </a>
+              <a type="button" class="btn btn-outline-primary d-flex flex-row align-items-center" asp-action="Send" asp-controller="Message" asp-route-id="@username">
+                <i class="fas fa-comments"></i> Message
+              </a>
+             </div>
             </div>
             <div class="ms-3" style="margin-top: 130px;">
               <h5>@name</h5>

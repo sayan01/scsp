@@ -31,21 +31,15 @@ namespace scsp.Controllers
                 return RedirectToAction("Logout", "Authentication");
             }
             var messages = _context.Message.Where(m => m.From == user || m.To == user).ToList();
-            foreach (var m in messages)
-            {
-                Console.WriteLine("message From:" + m.From.UserID);
-                Console.WriteLine("message To:" + m.To.UserID);
-                Console.WriteLine("message Content:" + m.Content);
-                Console.WriteLine("message Time:" + m.Time);
-                Console.WriteLine(" ");
-            }
-            var users = new List<User>();
+            var users = new Dictionary<User, int>();
             foreach (var message in messages)
             {
                 User frnd;
-                if( message.From == user) frnd = message.To;
-                else frnd = message.From;
-                if(!users.Contains(frnd)) users.Add(frnd);
+                if( message.FromId == username) frnd = _context.User.FirstOrDefault(u => u.UserID == message.ToId) ?? user;
+                else frnd = _context.User.FirstOrDefault(u => u.UserID == message.FromId) ?? user;
+                if(frnd == user) continue;
+                if(! users.ContainsKey(frnd)) users.Add(frnd, 1);
+                else users[frnd]++;
             }
             var vm = new MessageIndexViewModel(){
                 errormsg = errormsg,

@@ -8,5 +8,7 @@ namespace scsp.ViewModels
     public class ProfileUpdateDPViewModel
     {
         public User currentuser {get; set;} = new User();
+        public string AlertMsg {get; set;} = "";
+        public string AlertType {get; set;} = "";
     }
 }

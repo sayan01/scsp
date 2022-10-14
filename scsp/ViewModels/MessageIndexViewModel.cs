@@ -8,7 +8,7 @@ namespace scsp.ViewModels
 {
     public class MessageIndexViewModel
     {
-        public ICollection<User> Users {get; set;} = new List<User>();
+        public Dictionary<User, int> Users {get; set;} = new Dictionary<User, int>();
         public string errormsg {get; set;} = "";
         public User from {get; set;} = new User();
     }

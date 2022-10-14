@@ -23,22 +23,24 @@
         <div class="card">
           <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
             <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-              <a asp-action="UpdateDP" style="z-index: 1">
               @if (String.IsNullOrEmpty(@Model.currentuser.Photo))
               {
                 <img src='@avatardefault'
                 alt="profile photo" class="img-fluid img-thumbnail mt-4 mb-2"
-                style="width: 150px; z-index: 1; border-radius: 50%">
+                style="width: 150px; height: 150px; object-fit: cover; z-index: 1; border-radius: 50%">
               }else{
                 <img src='data:image;base64,@Model.currentuser.Photo'
                 alt="profile photo" class="img-fluid img-thumbnail mt-4 mb-2"
                 style="width: 150px; height: 150px; object-fit: cover; z-index: 1; border-radius: 50%">
               }
+              <div class="buttons d-flex flex-row" style="z-index: 1;">
+               <a type="button" class="btn btn-outline-success me-2 d-flex flex-row align-items-center justify-content-left" asp-action="Edit">
+                <i class="fas fa-user-edit"></i> Edit
               </a>
-              <a type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark" asp-action="Edit"
-              style="z-index: 1;">
-              Edit profile
+              <a type="button" class="btn btn-outline-primary d-flex flex-row align-items-center justify-content-left" asp-action="UpdateDP">
+                <i class="fas fa-camera"></i> Upload
               </a>
+             </div>
             </div>
             <div class="ms-3" style="margin-top: 130px;">
               <h5>@name</h5>

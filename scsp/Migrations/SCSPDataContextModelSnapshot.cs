@@ -189,22 +189,22 @@ namespace scsp.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("FromUserID")
+                    b.Property<string>("FromId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ToUserID")
+                    b.Property<string>("ToId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("MessageID");
 
-                    b.HasIndex("FromUserID");
+                    b.HasIndex("FromId");
 
-                    b.HasIndex("ToUserID");
+                    b.HasIndex("ToId");
 
                     b.ToTable("Message");
                 });
@@ -394,13 +394,13 @@ namespace scsp.Migrations
                 {
                     b.HasOne("scsp.Models.User", "From")
                         .WithMany("MessagesSent")
-                        .HasForeignKey("FromUserID")
+                        .HasForeignKey("FromId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("scsp.Models.User", "To")
                         .WithMany("MessagesRecieved")
-                        .HasForeignKey("ToUserID")
+                        .HasForeignKey("ToId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
