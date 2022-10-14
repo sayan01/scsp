@@ -37,6 +37,11 @@ public class HomeController : Controller
             {
                 if(post.AuthorId == frnd.FolloweeId){
                     post.Author = _context.User.FirstOrDefault(u => u.UserID == post.AuthorId) ?? post.Author;
+                    var Comments = _context.Comment.Where(c => c.Post == post).ToList() ?? new List<Comment>();
+                    foreach (var Comment in Comments){
+                        Comment.Author = _context.User.FirstOrDefault(u => u.UserID == Comment.AuthorId) ?? new User();
+                    }
+                    post.Comments = Comments;
                     frndposts.Add(post);
                     break;
                 }

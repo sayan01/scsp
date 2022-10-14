@@ -33,7 +33,7 @@
                 }
                 <div class="d-flex flex-column ms-2"> <span class="font-weight-bold">@Post.Author.FName @Post.Author.LName</span> <small class="text-primary">Following</small> </div>
             </div>
-            <div class="d-flex flex-row mt-1 ellipsis"> <small class="mr-2">@Post.Time.ToShortDateString()</small> </div>
+            <div class="d-flex flex-row mt-1 ellipsis"> <small class="mr-2">@Post.Time</small> </div>
         </div> 
         @if (!String.IsNullOrEmpty(Post.Photo))
         {
@@ -62,30 +62,6 @@
             </form>
             <div class="be-comment-block">
                 <h1 class="comments-title">Comments (@Post.Comments.Count)</h1>
-                @* comment start *@
-                <div class="be-comment">
-                <div class="be-img-comment">	
-                    <a href="blog-detail-2.html">
-                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" class="be-ava-comment">
-                    </a>
-                </div>
-                <div class="be-comment-content">
-                    <span class="be-comment-name">
-                        <a href="blog-detail-2.html">Ravi Sah</a>
-                        </span>
-                    <span class="be-comment-time">
-                        <i class="fa fa-clock-o"></i>
-                        May 27, 2015 at 3:14am
-                    </span>
-
-                    <p class="be-comment-text">
-                    Pellentesque gravida tristique ultrices. 
-                    Sed blandit varius mauris, vel volutpat urna hendrerit id. 
-                    Curabitur rutrum dolor gravida turpis tristique efficitur.
-                    </p>
-                </div>
-                </div>
-                @* comment end *@
                 @foreach (var Comment in Post.Comments)
                 {
                     User = @Comment.Author;
@@ -98,10 +74,10 @@
                     avatardefault = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
                     <div class="be-comment">
                         <div class="be-img-comment">	
-                            <a href="blog-detail-2.html">
+                            <a asp-action="Explore" asp-controller="Profile" asp-route-id="@Comment.Author.UserID">
                                 @if (!String.IsNullOrEmpty(Comment.Author.Photo))
                                 {
-                                <img src="data:image;base64,@Post.Author.Photo" alt="" class="be-ava-comment">
+                                <img src="data:image;base64,@Comment.Author.Photo" alt="" class="be-ava-comment" style="object-fit: cover">
                                 } else{
                                 <img src='@avatardefault' alt="" class="be-ava-comment">
                                 }
@@ -109,11 +85,11 @@
                         </div>
                         <div class="be-comment-content">
                             <span class="be-comment-name">
-                                <a href="blog-detail-2.html">@User.FName @User.LName</a>
+                                <a asp-action="Explore" asp-controller="Profile" asp-route-id="@Comment.Author.UserID">@User.FName @User.LName</a>
                                 </span>
                             <span class="be-comment-time">
                                 <i class="fa fa-clock-o"></i>
-                                @Comment.Time.ToShortDateString()
+                                @Comment.Time
                             </span>
 
                             <p class="be-comment-text">

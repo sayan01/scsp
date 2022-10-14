@@ -42,7 +42,12 @@ namespace scsp.Controllers
                 return Content("Post does not exist");
             }
             post.Author = _context.User.FirstOrDefault(u => u.UserID == post.AuthorId) ?? new User();
-            post.Comments = _context.Comment.Where(c => c.Post == post).ToList() ?? new List<Comment>();
+            var Comments = _context.Comment.Where(c => c.Post == post).ToList() ?? new List<Comment>();
+            foreach (var Comment in Comments)
+            {
+                Comment.Author = _context.User.FirstOrDefault(u => u.UserID == Comment.AuthorId) ?? new User();
+            }
+            post.Comments = Comments;
             return View(post);
         }
 

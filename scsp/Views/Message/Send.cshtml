@@ -11,21 +11,17 @@
 <a asp-action="Index" class="btn btn-outline-dark">&lt; Inbox</a>
 <h1>Chat with @to.UserID</h1>
 <hr />
-@foreach (var msg in @messages)
-{
-    <div class="card">
-        <div class="card-body">
-        <p class="card-text">@msg.Content</p>
-        </div>
-        <div class="card-footer">
-            From: @msg.From.UserID | 
-            To:  @msg.To.UserID
-        </div>
-        <div class="card-footer">
-            @msg.Time
-        </div>
-    </div>
-}
+<div class="chats">
+   <ul>
+    @foreach (var msg in @messages)
+    {
+        var direction =  @msg.From == @Model.from ? "you" : "him";
+      <li>
+        <div class="msg @direction"><span class="partner">@msg.From.UserID</span>@msg.Content<span class="time">@msg.Time</span></div>
+      </li>
+    }
+   </ul>
+</div>
 <form asp-action="Send" class="">
     <div class="bottom fixed-bottom">
         @if (!String.IsNullOrEmpty(@Model.errormsg)){
@@ -55,4 +51,6 @@
             border-top: 1px solid var(--bs-gray-500);
         }
     </style>
+    <link href="@Url.Content("~/css/message.css")" rel="stylesheet" type="text/css" />
+
 }
