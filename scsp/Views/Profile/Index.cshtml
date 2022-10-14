@@ -92,14 +92,14 @@
                       <div class="card-footer">
                         <i class="fa-solid fa-thumbs-up"></i> @Post.Likes.Count &nbsp; &nbsp;
                         <i class="fa-solid fa-thumbs-down"></i> @Post.Dislikes.Count &nbsp; &nbsp;
-                        <i class="fa-solid fa-comment"></i> @Post.Dislikes.Count &nbsp; &nbsp;
+                        <i class="fa-solid fa-comment"></i> @Post.Comments.Count &nbsp; &nbsp;
                         <a asp-action="Delete" asp-controller="Post" asp-route-id="@Post.PostID" class="btn btn-outline-danger">
                           <i class="fa-solid fa-trash"></i> 
                           Delete
                         </a>
                       </div>
                       <div class="card-footer">
-                        Posted on: @Post.Time by @Post.Author.FName @Post.Author.LName
+                        @Post.Time
                       </div>
                     </div>
                   </div>
