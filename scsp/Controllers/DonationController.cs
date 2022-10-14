@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using scsp.Models;
+using scsp.ViewModels;
 
 namespace scsp.Controllers
 {
@@ -19,35 +21,30 @@ namespace scsp.Controllers
         }
 
         // GET: Donation
+        [Authorize]
         public async Task<IActionResult> Index()
         {
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : null;
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(user == null){
+                return RedirectToAction("Logout", "Authentication");
+            }
               return _context.Donation != null ? 
-                          View(await _context.Donation.ToListAsync()) :
-                          Problem("Entity set 'SCSPDataContext.Donation'  is null.");
+                          View(await _context.Donation.Where(d => d.User == user).ToListAsync()) :
+                          Content("Entity set 'SCSPDataContext.Donation'  is null.");
         }
 
-        // GET: Donation/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Donation == null)
-            {
-                return NotFound();
-            }
-
-            var donation = await _context.Donation
-                .FirstOrDefaultAsync(m => m.DonationID == id);
-            if (donation == null)
-            {
-                return NotFound();
-            }
-
-            return View(donation);
-        }
-
+        
         // GET: Donation/Create
-        public IActionResult Create()
+        public IActionResult Create(string message = "", string alert = "", double amount = 0.0)
         {
-            return View();
+            DonationCreateViewModel vm = new DonationCreateViewModel(){
+                AlertMsg = message,
+                AlertType = alert,
+                Amount = amount,
+            };
+            return View(vm);
         }
 
         // POST: Donation/Create
@@ -55,105 +52,28 @@ namespace scsp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DonationID,Time,Amount")] Donation donation)
+        public async Task<IActionResult> Create(double amount)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(donation);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+            if(amount <= 0){
+                return Create("Amount cannot be negative or zero", "danger", amount);
             }
-            return View(donation);
-        }
-
-        // GET: Donation/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Donation == null)
-            {
-                return NotFound();
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : null;
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(user == null){
+                return RedirectToAction("Logout", "Authentication");
             }
-
-            var donation = await _context.Donation.FindAsync(id);
-            if (donation == null)
-            {
-                return NotFound();
-            }
-            return View(donation);
-        }
-
-        // POST: Donation/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DonationID,Time,Amount")] Donation donation)
-        {
-            if (id != donation.DonationID)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(donation);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DonationExists(donation.DonationID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(donation);
-        }
-
-        // GET: Donation/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Donation == null)
-            {
-                return NotFound();
-            }
-
-            var donation = await _context.Donation
-                .FirstOrDefaultAsync(m => m.DonationID == id);
-            if (donation == null)
-            {
-                return NotFound();
-            }
-
-            return View(donation);
-        }
-
-        // POST: Donation/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Donation == null)
-            {
-                return Problem("Entity set 'SCSPDataContext.Donation'  is null.");
-            }
-            var donation = await _context.Donation.FindAsync(id);
-            if (donation != null)
-            {
-                _context.Donation.Remove(donation);
-            }
-            
+            Donation donation = new Donation{
+                User = user,
+                Amount = amount,
+                Time = DateTime.Now
+            };
+            _context.Add(donation);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
+        
         private bool DonationExists(int id)
         {
           return (_context.Donation?.Any(e => e.DonationID == id)).GetValueOrDefault();
