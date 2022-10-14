@@ -50,10 +50,14 @@ public class ProfileController : Controller
     public IActionResult Explore(string id)
     {
         var identity = HttpContext.User.Identity;
-        var username = identity != null ? identity.Name : null;
-        if(username == id)
+        var cusername = identity != null ? identity.Name : null;
+        var cuser = _context.User.FirstOrDefault(m => m.UserID == cusername);
+        if(cuser == null){
+            return RedirectToAction("Logout", "Authentication");
+        }
+        if(cusername == id)
             return RedirectToAction(nameof(Index));
-        username = id;
+        var username = id;
         var user = _context.User.FirstOrDefault(m => m.UserID == username);
         if(user == null){
             return Content("User (" + username + ") not found");
@@ -61,6 +65,15 @@ public class ProfileController : Controller
         var posts = _context.Post.Where(p => p.Author == user).OrderBy(post => post.Time).Reverse().ToList();
         var followers = _context.UserUser.Where(uu => uu.Followee == user).ToList();
         var following = _context.UserUser.Where(uu => uu.Follower == user).ToList();
+        bool ifollowhim = false, hefollowsme = false;
+        foreach (var follower in followers)
+        {
+            ifollowhim = ifollowhim || (follower.Follower == cuser);
+        }
+        foreach (var followee in following)
+        {
+            hefollowsme = hefollowsme || followee.Followee == cuser;
+        }
         foreach (var post in posts)
         {
             post.Likes = _context.LikePost.Where(l => l.Post == post).ToList();
@@ -72,6 +85,8 @@ public class ProfileController : Controller
             Posts = posts,
             Followers = followers,
             Following = following,
+            ifollowhim = ifollowhim,
+            hefollowsme = hefollowsme,
         };
         return View(vm);
     }
@@ -194,7 +209,9 @@ public class ProfileController : Controller
             if(cuser == user){
                 return Content("Cannot follow ownself");
             }
-            Foll relation = new Foll{Follower = cuser, Followee = user};
+            Foll? relation = _context.UserUser.FirstOrDefault(uu => uu.Follower == cuser && uu.Followee == user);
+            if(relation != null) return RedirectToAction(nameof(Unfollow), new {id = id});
+            relation = new Foll{Follower = cuser, Followee = user};
             cuser.Follows.Add(relation);
             user.FollowedBy.Add(relation);
             try{
@@ -205,7 +222,41 @@ public class ProfileController : Controller
             catch (Exception e){
                 return Content("Concurrency Exception: " + e.Message);
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Explore), new {id = id});
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Unfollow(string id)
+        {
+            var username = id;
+            var identity = HttpContext.User.Identity;
+            var cusername = identity != null ? identity.Name : "";
+            cusername ??= "";
+            var user = await _context.User.FirstOrDefaultAsync(e => e.UserID == username);
+            var cuser = await _context.User.FirstOrDefaultAsync(e => e.UserID == cusername);
+            if (cuser == null){
+                return RedirectToAction("Logout", "Authentication");
+            }
+            if(user == null){
+                return Content("User " + username + "does not exist");
+            }
+            if(cuser == user){
+                return Content("Cannot follow ownself");
+            }
+            Foll? relation = _context.UserUser.FirstOrDefault(uu => uu.Follower == cuser && uu.Followee == user);
+            if(relation == null) return Content("Already not following");
+            cuser.Follows.Remove(relation);
+            user.FollowedBy.Remove(relation);
+            try{
+                _context.Update(user);
+                _context.Update(cuser);
+                _context.Remove(relation);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e){
+                return Content("Concurrency Exception: " + e.Message);
+            }
+            return RedirectToAction(nameof(Explore), new {id = id});
         }
 
 

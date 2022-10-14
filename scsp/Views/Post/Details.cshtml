@@ -15,6 +15,8 @@
     bool dislikedbyme = @Model.dislikedbyme;
     string like_btn_design = likedbyme ? "btn-success" : "btn-outline-success";
     string dislike_btn_design = dislikedbyme ? "btn-danger" : "btn-outline-danger";
+    string likemsg = "Like" + (likedbyme ? "d" : "");
+    string dislikemsg = "Dislike" + (dislikedbyme ? "d" : "");
 }
 
 
@@ -64,10 +66,14 @@
             <div class="d-flex justify-content-between align-items-center stats">
                 <div class="d-flex flex-row icons align-items-center"> 
                     <div class="likes">
-                    <a asp-action="Like" asp-route-id="@Post.PostID" class="btn @like_btn_design"><i class="fa fa-thumbs-up"></i> Like @Post.Likes.Count </a>
+                    <a asp-action="Like" asp-route-id="@Post.PostID" class="btn @like_btn_design"><i class="fa fa-thumbs-up"></i>
+                     @likemsg
+                    @Post.Likes.Count </a>
                     </div>
                     <div class="dislikes">
-                   <a asp-action="Dislike" asp-route-id="@Post.PostID" class="btn @dislike_btn_design"><i class="fa fa-thumbs-down"></i> Dislike @Post.Dislikes.Count</a> 
+                   <a asp-action="Dislike" asp-route-id="@Post.PostID" class="btn @dislike_btn_design"><i class="fa fa-thumbs-down"></i> 
+                   @dislikemsg
+                   @Post.Dislikes.Count</a> 
                     </div>
                 </div>
             </div>

@@ -3,3 +3,9 @@
     height: 15vw;
     object-fit: cover;
 }
+
+.post-card:hover{
+    transform: scale(1.02);
+    border: 2px solid var(--bs-gray-500);
+    transition: all 0.05s ease-in-out;
+}

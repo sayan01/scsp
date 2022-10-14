@@ -11,5 +11,7 @@ namespace scsp.ViewModels
         public ICollection<Post> Posts {get; set;} = new List<Post>();
         public ICollection<Foll> Followers {get; set;} = new List<Foll>();
         public ICollection<Foll> Following {get; set;} = new List<Foll>();
+        public bool ifollowhim {get; set;}
+        public bool hefollowsme {get; set;}
     }
 }

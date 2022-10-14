@@ -9,6 +9,9 @@
     string name = fname + " " + lname;
     string initials = @User.FName[0] + "" + (String.IsNullOrEmpty(@User.LName) ? "" : @User.LName[0]);
     string avatardefault = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
+    var ifollowhim = @Model.ifollowhim;
+    var hefollowsme = @Model.hefollowsme;
+    var follow_design = ifollowhim ? "btn-success" : "btn-outline-success";
 }
 
 @section Styles {
@@ -34,8 +37,14 @@
                 style="width: 150px; height: 150px; object-fit: cover; z-index: 1; border-radius: 50%">
               }
              <div class="buttons d-flex flex-row" style="z-index: 1;">
-               <a type="button" class="btn btn-outline-success me-2 d-flex flex-row align-items-center" asp-action="Follow" asp-controller="Profile" asp-route-id="@username">
-                <i class="fas fa-user-plus"></i> Follow
+               <a type="button" class="btn @follow_design me-2 d-flex flex-row align-items-center" asp-action="Follow" asp-controller="Profile" asp-route-id="@username">
+                <i class="fas fa-user-plus"></i> 
+                @if (ifollowhim)
+                {
+                  <div>Following</div>
+                }else{
+                  <div>Follow</div>
+                }
               </a>
               <a type="button" class="btn btn-outline-primary d-flex flex-row align-items-center" asp-action="Send" asp-controller="Message" asp-route-id="@username">
                 <i class="fas fa-comments"></i> Message
@@ -84,7 +93,8 @@
                 @for (int j = 0; j < 2 && i*2 + j < @Model.Posts.Count; j++){
                   var Post = Model.Posts.ToList()[i*2+j];
                   <div class="col">
-                    <div class="card">
+                    <a class="text-reset text-decoration-none" asp-action="Details" asp-controller="Post" asp-route-id="@Post.PostID">
+                    <div class="card post-card">
                       @if (!String.IsNullOrEmpty(Post.Photo))
                       {
                         <img src="data:image;base64,@Post.Photo" class="card-img-top" alt="photo">
@@ -103,6 +113,7 @@
                         @Post.Time
                       </div>
                     </div>
+                    </a>
                   </div>
                 }
               </div>
