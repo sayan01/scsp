@@ -23,7 +23,6 @@ public class HomeController : Controller
     {
         var identity = HttpContext.User.Identity;
         var username = identity != null ? identity.Name : null;
-        Console.WriteLine(username);
         var user = _context.User.FirstOrDefault(m => m.UserID == username);
         if(user == null){
             return RedirectToAction("Logout", "Authentication");

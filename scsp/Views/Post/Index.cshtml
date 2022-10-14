@@ -46,10 +46,9 @@
                 @item.Author.UserID
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Photo)
+                @item.Photo.Substring(0,10) ...
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.PostID">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.PostID">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.PostID">Delete</a>
             </td>

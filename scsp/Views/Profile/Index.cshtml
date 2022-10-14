@@ -22,13 +22,22 @@
         <div class="card">
           <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
             <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-              <img src='@avatardefault'
+              <a asp-action="UpdateDP" style="z-index: 1">
+              @if (String.IsNullOrEmpty(@Model.currentuser.Photo))
+              {
+                <img src='@avatardefault'
                 alt="profile photo" class="img-fluid img-thumbnail mt-4 mb-2"
                 style="width: 150px; z-index: 1; border-radius: 50%">
-                  <a type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark" asp-action="Edit"
-                  style="z-index: 1;">
-                  Edit profile
-                  </a>
+              }else{
+                <img src='data:image;base64,@Model.currentuser.Photo'
+                alt="profile photo" class="img-fluid img-thumbnail mt-4 mb-2"
+                style="width: 150px; height: 150px; object-fit: cover; z-index: 1; border-radius: 50%">
+              }
+              </a>
+              <a type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark" asp-action="Edit"
+              style="z-index: 1;">
+              Edit profile
+              </a>
             </div>
             <div class="ms-3" style="margin-top: 130px;">
               <h5>@name</h5>
@@ -68,9 +77,9 @@
                   var Post = Model.Posts.ToList()[i*2+j];
                   <div class="col">
                     <div class="card">
-                      @if (String.IsNullOrEmpty(Post.Photo))
+                      @if (!String.IsNullOrEmpty(Post.Photo))
                       {
-                        <img src="data:image/jpg;base64,@Post.Photo" class="card-img-top" alt="photo">
+                        <img src="data:image;base64,@Post.Photo" class="card-img-top" alt="photo">
                       }
                       <div class="card-body">
                         @* <h5 class="card-title">Card title</h5> *@
@@ -81,6 +90,10 @@
                         <i class="fa-solid fa-thumbs-up"></i> @Post.Likes.Count &nbsp; &nbsp;
                         <i class="fa-solid fa-thumbs-down"></i> @Post.Dislikes.Count &nbsp; &nbsp;
                         <i class="fa-solid fa-comment"></i> @Post.Dislikes.Count &nbsp; &nbsp;
+                        <a asp-action="Delete" asp-controller="Post" asp-route-id="@Post.PostID" class="btn btn-outline-dark">
+                          <i class="fa-solid fa-trash"></i> 
+                          Delete
+                        </a>
                       </div>
                       <div class="card-footer">
                         Posted on: @Post.Time by @Post.Author.FName

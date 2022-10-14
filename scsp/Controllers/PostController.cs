@@ -102,58 +102,9 @@ namespace scsp.Controllers
             }
         }
 
-        // GET: Post/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Post == null)
-            {
-                return NotFound();
-            }
-
-            var post = await _context.Post.FindAsync(id);
-            if (post == null)
-            {
-                return NotFound();
-            }
-            return View(post);
-        }
-
-        // POST: Post/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PostID,Content,Time")] Post post)
-        {
-            if (id != post.PostID)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(post);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PostExists(post.PostID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(post);
-        }
-
+        
         // GET: Post/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Post == null)
@@ -163,11 +114,18 @@ namespace scsp.Controllers
 
             var post = await _context.Post
                 .FirstOrDefaultAsync(m => m.PostID == id);
-            if (post == null)
-            {
+            if (post == null){
                 return NotFound();
             }
-
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : null;
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(user == null){
+                return RedirectToAction("Logout", "Authentication");
+            }
+            if(post.Author != user){
+                return Unauthorized();
+            }
             return View(post);
         }
 
@@ -181,13 +139,21 @@ namespace scsp.Controllers
                 return Problem("Entity set 'SCSPDataContext.Post'  is null.");
             }
             var post = await _context.Post.FindAsync(id);
-            if (post != null)
-            {
-                _context.Post.Remove(post);
+            if (post == null){
+                return NotFound();
             }
-            
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : null;
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(user == null){
+                return RedirectToAction("Logout", "Authentication");
+            }
+            if(post.Author != user){
+                return Unauthorized();
+            }
+            _context.Post.Remove(post);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), "Home");
         }
 
         private bool PostExists(int id)
