@@ -1,39 +1,41 @@
-@model IEnumerable<scsp.Models.Message>
+@model scsp.ViewModels.MessageIndexViewModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Inbox";
 }
+@if (!String.IsNullOrEmpty(@Model.errormsg))
+{
+    string alert = "danger";
+    <div class="alert alert-@alert alert-dismissible fade show" role="alert">
+        <h5>@Model.errormsg</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+<h1>Inbox</h1>
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Content)
+                Username
+            </th>
+            <th>Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Time)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Users) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Content)
+                @Html.DisplayFor(modelItem => item.UserID)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Time)
+                @item.FName @item.LName
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.MessageID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MessageID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MessageID">Delete</a>
+                <a asp-action="Send" asp-route-id="@item.UserID">Open</a>
             </td>
         </tr>
 }

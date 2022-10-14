@@ -1,0 +1,48 @@
+@model scsp.ViewModels.MessageSendViewModel
+
+@{
+    var messages = @Model.Messages;
+    var message = @Model.message;
+    var errormsg = @Model.errormsg;
+    var from = @Model.from;
+    var to = @Model.to;
+    ViewData["Title"] = "Chat - " + to.UserID;
+}
+@if (!String.IsNullOrEmpty(@Model.errormsg))
+{
+    string alert = "danger";
+    <div class="alert alert-@alert alert-dismissible fade show" role="alert">
+        <h5>@Model.errormsg</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+<a asp-action="Index" class="btn btn-outline-dark">&lt; Inbox</a>
+<h1>Chat with @to.UserID</h1>
+<hr />
+@foreach (var msg in @messages)
+{
+    <div class="card">
+        <div class="card-body">
+        <p class="card-text">@msg.Content</p>
+        </div>
+        <div class="card-footer">
+            From: @msg.From.UserID | 
+            To:  @msg.To.UserID
+        </div>
+        <div class="card-footer">
+            @msg.Time
+        </div>
+    </div>
+}
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Send">
+            <div class="form-group">
+                <input class="form-control" name="message" id="message"/>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Send" class="btn btn-outline-primary" />
+            </div>
+        </form>
+    </div>
+</div>

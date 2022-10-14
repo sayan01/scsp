@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using scsp.Models;
+using scsp.ViewModels;
 
 namespace scsp.Controllers
 {
@@ -19,141 +21,102 @@ namespace scsp.Controllers
         }
 
         // GET: Message
-        public async Task<IActionResult> Index()
+        [Authorize]
+        public IActionResult Index(string errormsg="")
         {
-              return _context.Message != null ? 
-                          View(await _context.Message.ToListAsync()) :
-                          Problem("Entity set 'SCSPDataContext.Message'  is null.");
-        }
-
-        // GET: Message/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Message == null)
-            {
-                return NotFound();
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : null;
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(user == null){
+                return RedirectToAction("Logout", "Authentication");
             }
-
-            var message = await _context.Message
-                .FirstOrDefaultAsync(m => m.MessageID == id);
-            if (message == null)
+            var messages = _context.Message.Where(m => m.From == user || m.To == user).ToList();
+            foreach (var m in messages)
             {
-                return NotFound();
+                Console.WriteLine("message From:" + m.From.UserID);
+                Console.WriteLine("message To:" + m.To.UserID);
+                Console.WriteLine("message Content:" + m.Content);
+                Console.WriteLine("message Time:" + m.Time);
+                Console.WriteLine(" ");
             }
-
-            return View(message);
+            var users = new List<User>();
+            foreach (var message in messages)
+            {
+                User frnd;
+                if( message.From == user) frnd = message.To;
+                else frnd = message.From;
+                if(!users.Contains(frnd)) users.Add(frnd);
+            }
+            var vm = new MessageIndexViewModel(){
+                errormsg = errormsg,
+                Users = users,
+                from = user
+            };
+            return _context.Message != null ? View(vm) : Content("Entity set 'SCSPDataContext.Message'  is null.");
         }
 
-        // GET: Message/Create
-        public IActionResult Create()
+        [Authorize]
+        public IActionResult Send(string id, string message="", string errormsg = "")
         {
-            return View();
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : null;
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(user == null){
+                return RedirectToAction("Logout", "Authentication");
+            }
+            var to_username = id;
+            var to_user = _context.User.FirstOrDefault(m => m.UserID == to_username);
+            if(to_user == null){
+                return Content("User " + id + " not found");
+            }
+            var messages = _context.Message
+            .Where(m => ( m.From == user && m.To == to_user ) || ( m.To == user && m.From == to_user ) )
+            .OrderBy(m => m.Time)
+            .ToList();
+            var vm = new MessageSendViewModel(){
+                errormsg = errormsg,
+                Messages = messages,
+                message = message,
+                from = user,
+                to =  to_user
+            };
+              return _context.Message != null ? View(vm) : Content("Entity set 'SCSPDataContext.Message'  is null.");
         }
 
-        // POST: Message/Create
+        
+        // POST: Message/Send
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MessageID,Content,Time")] Message message)
+        [Authorize]
+        public async Task<IActionResult> Send(string id, string message)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(message);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : null;
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(user == null){
+                return RedirectToAction("Logout", "Authentication");
             }
-            return View(message);
-        }
-
-        // GET: Message/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Message == null)
-            {
-                return NotFound();
+            var to_username = id;
+            var to_user = _context.User.FirstOrDefault(m => m.UserID == to_username);
+            if(to_user == null){
+                return Content("User " + id + " not found");
             }
-
-            var message = await _context.Message.FindAsync(id);
-            if (message == null)
-            {
-                return NotFound();
+            if(String.IsNullOrEmpty(message)){
+                return RedirectToAction(nameof(Send), new {id = id, message = message, errormsg = "Message cannot be empty"});
             }
-            return View(message);
-        }
-
-        // POST: Message/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MessageID,Content,Time")] Message message)
-        {
-            if (id != message.MessageID)
-            {
-                return NotFound();
+            if(message.Length > 250){
+                return RedirectToAction(nameof(Send), new {id = id, message = message, errormsg = "Message too long. Max length is 250 characters."});
             }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(message);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MessageExists(message.MessageID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(message);
-        }
-
-        // GET: Message/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Message == null)
-            {
-                return NotFound();
-            }
-
-            var message = await _context.Message
-                .FirstOrDefaultAsync(m => m.MessageID == id);
-            if (message == null)
-            {
-                return NotFound();
-            }
-
-            return View(message);
-        }
-
-        // POST: Message/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Message == null)
-            {
-                return Problem("Entity set 'SCSPDataContext.Message'  is null.");
-            }
-            var message = await _context.Message.FindAsync(id);
-            if (message != null)
-            {
-                _context.Message.Remove(message);
-            }
-            
+            Message Message = new Message{
+                From = user, To = to_user, Content = message, Time = DateTime.Now
+            };
+            _context.Add(Message);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            return RedirectToAction(nameof(Send), new {id = id});
 
+        }
         private bool MessageExists(int id)
         {
           return (_context.Message?.Any(e => e.MessageID == id)).GetValueOrDefault();
