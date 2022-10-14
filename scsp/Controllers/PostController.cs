@@ -41,14 +41,44 @@ namespace scsp.Controllers
             if(post == null){
                 return Content("Post does not exist");
             }
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : null;
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(user == null){
+                return RedirectToAction("Logout", "Authentication");
+            }
             post.Author = _context.User.FirstOrDefault(u => u.UserID == post.AuthorId) ?? new User();
             var Comments = _context.Comment.Where(c => c.Post == post).ToList() ?? new List<Comment>();
             foreach (var Comment in Comments)
             {
                 Comment.Author = _context.User.FirstOrDefault(u => u.UserID == Comment.AuthorId) ?? new User();
             }
+            var Likes = _context.LikePost.Where( lp => lp.Post == post).ToList() ?? new List<LikePost>();
+            var Dislikes = _context.DislikePost.Where( dlp => dlp.Post == post).ToList() ?? new List<DislikePost>();
+            bool likedbyme = false, dislikedbyme = false;
+            foreach (var Like in Likes)
+            {
+                Like.Author = _context.User.FirstOrDefault(u => u.UserID == Like.AuthorId) ?? new User();
+                likedbyme = likedbyme || Like.Author == user;
+            }
+            foreach (var Dislike in Dislikes)
+            {
+                Dislike.Author = _context.User.FirstOrDefault(u => u.UserID == Dislike.AuthorId) ?? new User();
+                dislikedbyme = dislikedbyme || Dislike.Author == user;
+            }
             post.Comments = Comments;
-            return View(post);
+            post.Likes = Likes;
+            post.Dislikes = Dislikes;
+
+            var vm = new PostDetailsViewModel{
+                Post = post,
+                AlertMsg = "",
+                AlertType = "",
+                likedbyme = likedbyme,
+                dislikedbyme = dislikedbyme,
+            };
+
+            return View(vm);
         }
 
         // GET: Post/Create
@@ -135,6 +165,7 @@ namespace scsp.Controllers
         }
 
         // POST: Post/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -160,6 +191,149 @@ namespace scsp.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index), "Home");
         }
+
+        // GET: Post/Like/5
+        [Authorize]
+        public async Task<IActionResult> Like(int id)
+        {
+            if (_context.Post == null)
+            {
+                return Problem("Entity set 'SCSPDataContext.Post'  is null.");
+            }
+            var post = await _context.Post.FindAsync(id);
+            if (post == null){
+                return NotFound();
+            }
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : null;
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(user == null || username == null){
+                return RedirectToAction("Logout", "Authentication");
+            }
+            DislikePost? dlp = _context.DislikePost.FirstOrDefault(dlp => dlp.Post == post && dlp.Author == user);
+            if(dlp != null){
+                post.Dislikes.Remove(dlp);
+                _context.Post.Update(post);
+                _context.DislikePost.Remove(dlp);
+                await _context.SaveChangesAsync();
+            }
+            LikePost? lp = _context.LikePost.FirstOrDefault(lp => lp.Post == post && lp.Author == user);
+            if(lp != null){
+                return RedirectToAction(nameof(UnLike), new {id = id});
+            }
+            lp = new LikePost{
+                Author = user,
+                AuthorId = username,
+                Post = post
+            };
+            _context.LikePost.Add(lp);
+            await _context.SaveChangesAsync();
+            post.Likes.Add(lp);
+            _context.Post.Update(post);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details), "Post", new {id = id});
+        }
+
+        // GET: Post/Dislike/5
+        [Authorize]
+        public async Task<IActionResult> Dislike(int id)
+        {
+            if (_context.Post == null)
+            {
+                return Problem("Entity set 'SCSPDataContext.Post'  is null.");
+            }
+            var post = await _context.Post.FindAsync(id);
+            if (post == null){
+                return NotFound();
+            }
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : null;
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(user == null || username == null){
+                return RedirectToAction("Logout", "Authentication");
+            }
+            LikePost? lp = _context.LikePost.FirstOrDefault(lp => lp.Post == post && lp.Author == user);
+            if(lp != null){
+                post.Likes.Remove(lp);
+                _context.Post.Update(post);
+                _context.LikePost.Remove(lp);
+                await _context.SaveChangesAsync();
+            }
+            DislikePost? dlp = _context.DislikePost.FirstOrDefault(dlp => dlp.Post == post && dlp.Author == user);
+            if(dlp != null){
+                return RedirectToAction(nameof(UnDislike), new {id = id});
+            }
+            dlp = new DislikePost{
+                Author = user,
+                AuthorId = username,
+                Post = post
+            };
+            _context.DislikePost.Add(dlp);
+            await _context.SaveChangesAsync();
+            post.Dislikes.Add(dlp);
+            _context.Post.Update(post);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details), "Post", new {id = id});
+        }
+
+        // GET: Post/UnLike/5
+        [Authorize]
+        public async Task<IActionResult> UnLike(int id)
+        {
+            if (_context.Post == null)
+            {
+                return Problem("Entity set 'SCSPDataContext.Post'  is null.");
+            }
+            var post = await _context.Post.FindAsync(id);
+            if (post == null){
+                return NotFound();
+            }
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : null;
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(user == null || username == null){
+                return RedirectToAction("Logout", "Authentication");
+            }
+            LikePost? lp = _context.LikePost.FirstOrDefault(lp => lp.Post == post && lp.Author == user);
+            if(lp != null){
+                post.Likes.Remove(lp);
+                _context.Post.Update(post);
+                _context.LikePost.Remove(lp);
+                await _context.SaveChangesAsync();
+            }
+            else return RedirectToAction(nameof(Like), new {id = id});
+            return RedirectToAction(nameof(Details), "Post", new {id = id});
+        }
+
+        // GET: Post/UnDislike/5
+        [Authorize]
+        public async Task<IActionResult> UnDislike(int id)
+        {
+            if (_context.Post == null)
+            {
+                return Problem("Entity set 'SCSPDataContext.Post'  is null.");
+            }
+            var post = await _context.Post.FindAsync(id);
+            if (post == null){
+                return NotFound();
+            }
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : null;
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(user == null || username == null){
+                return RedirectToAction("Logout", "Authentication");
+            }
+            DislikePost? dlp = _context.DislikePost.FirstOrDefault(dlp => dlp.Post == post && dlp.Author == user);
+            if(dlp != null){
+                post.Dislikes.Remove(dlp);
+                _context.Post.Update(post);
+                _context.DislikePost.Remove(dlp);
+                await _context.SaveChangesAsync();
+            } else return RedirectToAction(nameof(Dislike), new {id = id});
+            return RedirectToAction(nameof(Details), "Post", new {id = id});
+        }
+
+
 
         private bool PostExists(int id)
         {

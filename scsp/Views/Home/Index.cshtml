@@ -24,6 +24,7 @@
           string name = fname + " " + lname;
           string initials = @User.FName[0] + "" + (String.IsNullOrEmpty(@User.LName) ? "" : @User.LName[0]);
           string avatardefault = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
+          <a class="text-reset text-decoration-none" asp-action="Details" asp-controller="Post" asp-route-id="@Post.PostID">
           <div class="card">
             <div class="d-flex justify-content-between p-2 px-3">
                 <div class="d-flex flex-row align-items-center"> 
@@ -33,36 +34,32 @@
                     } else{
                     <img src='@avatardefault' class="rounded-circle" width=50 alt="photo">
                     }
-                    <div class="d-flex flex-column ms-2"> <span class="font-weight-bold">@Post.Author.FName @Post.Author.LName</span> <small class="text-primary">Following</small> </div>
+                    <div class="d-flex flex-column ms-2"> 
+                        <span class="font-weight-bold">@Post.Author.FName @Post.Author.LName</span> <small class="text-primary" style="text-align: left">@Post.AuthorId</small> 
+                    </div>
                 </div>
-                <div class="d-flex flex-row mt-1 ellipsis"> <small class="mr-2">@Post.Time.ToShortDateString()</small> </div>
+                <div class="d-flex flex-row mt-1 ellipsis"> <small class="mr-2">@Post.Time</small> </div>
             </div> 
             @if (!String.IsNullOrEmpty(Post.Photo))
             {
                 <img src="data:image;base64,@Post.Photo" class="img-fluid" alt="photo">
             }
-            <div class="ps-3 pt-2 pb-2">
+            <div class="ps-3 pt-2 pb-2 pe-3">
                 <p class="" style="text-align: left;">@Post.Content</p>
                 <hr>
-                <div class="d-flex justify-content-between align-items-center stats">
-                    <div class="d-flex flex-row icons align-items-center"> 
-                        <div class="likes">
-                        <i class="fa fa-thumbs-up"></i> @Post.Likes.Count 
-                        </div>
-                        <div class="dislikes">
-                        <i class="fa fa-thumbs-down ml-2"></i> @Post.Dislikes.Count 
-                        </div>
+                <div class="d-flex justify-content-left align-items-center stats">
+                    <div class="likes">
+                    <a asp-action="Details" asp-controller="Post" asp-route-id="@Post.PostID" class="btn btn-outline-success text-decoration-none">@Post.Likes.Count  Likes <i class="fa fa-thumbs-up"></i></a>
                     </div>
-                    <a class="muted-color com" asp-action="Details" asp-controller="Post" asp-route-id="@Post.PostID"> @Post.Comments.Count comments </a>
+                    <div class="dislikes">
+                    <a asp-action="Details" asp-controller="Post" asp-route-id="@Post.PostID" class="btn btn-outline-danger">@Post.Dislikes.Count Dislikes <i class="fa fa-thumbs-down ml-2"></i> </a>
+                    </div>
+                    <div class="comments">
+                    <a asp-action="Details" asp-controller="Post" asp-route-id="@Post.PostID" class="btn btn-outline-primary">@Post.Comments.Count Comments <i class="fa fa-comment ml-2"></i></a>
+                    </div>
                 </div>
-                <hr>
-                <form asp-action="Create" asp-controller="Comment" asp-route-id="@Post.PostID">
-                  <div class="commentbox input-group">
-                      <input class="form-control rounded" placeholder="Write a comment..." name="comment" id="comment" autocomplete="off" required maxlength="250"/>
-                      <button type="submit" value="Comment" class="btn btn-primary me-2">Comment <i class="fas fa-paper-plane"></i></button>
-                  </div>
-                </form>
             </div>
         </div>
+        </a>
         }
 </div>

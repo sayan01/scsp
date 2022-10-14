@@ -38,10 +38,12 @@ public class HomeController : Controller
                 if(post.AuthorId == frnd.FolloweeId){
                     post.Author = _context.User.FirstOrDefault(u => u.UserID == post.AuthorId) ?? post.Author;
                     var Comments = _context.Comment.Where(c => c.Post == post).ToList() ?? new List<Comment>();
-                    foreach (var Comment in Comments){
-                        Comment.Author = _context.User.FirstOrDefault(u => u.UserID == Comment.AuthorId) ?? new User();
-                    }
+                    var Likes = _context.LikePost.Where( lp => lp.Post == post).ToList() ?? new List<LikePost>();
+                    var Dislikes = _context.DislikePost.Where( dlp => dlp.Post == post).ToList() ?? new List<DislikePost>();
                     post.Comments = Comments;
+                    post.Likes = Likes;
+                    post.Dislikes = Dislikes;
+
                     frndposts.Add(post);
                     break;
                 }
