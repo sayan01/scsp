@@ -1,0 +1,43 @@
+@{
+    ViewData["Title"] = "Admin Page";
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/admin.css")" rel="stylesheet" type="text/css" />
+
+    <style>
+    .normallinks{
+        display: none !important;
+    }
+    .adminlinks{
+        display: inherit !important;
+    }
+    </style>
+}
+
+
+<div class="text-center">
+    <h1 class="display-4">Admin Page</h1>
+    <div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-6">Number of Comments</dt>
+        <dd class = "col-sm-1">@Model.comments</dd>
+        <dt class = "col-sm-6">Number of Posts</dt>
+        <dd class = "col-sm-1">@Model.posts</dd>
+        <dt class = "col-sm-6">Number of Registration</dt>
+        <dd class = "col-sm-1">@Model.registrations</dd>
+        <dt class = "col-sm-6">Number of Messages</dt>
+        <dd class = "col-sm-1">@Model.messages</dd>
+        <dt class = "col-sm-6">Number of Likes</dt>
+        <dd class = "col-sm-1">@Model.likes</dd>
+        <dt class = "col-sm-6">Number of Dislikes</dt>
+        <dd class = "col-sm-1">@Model.dislikes</dd>
+        <dt class = "col-sm-6">Number of Donations</dt>
+        <dd class = "col-sm-1">@Model.donations</dd>
+        <dt class = "col-sm-6">Total Amount of Donations</dt>
+        <dd class = "col-sm-1">@Model.donationTotal</dd>
+    </dl>
+</div>
+
+</div>

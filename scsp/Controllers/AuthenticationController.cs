@@ -146,7 +146,7 @@ namespace scsp.Controllers
                         ExpiresUtc = DateTime.UtcNow.AddMinutes(remember == "on" ? 86400 : 30)
                     };
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,new ClaimsPrincipal(claimsIdentity),authProperties);
-                    return RedirectToAction("Index","Home");
+                    return RedirectToAction("Index", username == "admin" ? "Admin" : "Home");
                 }
                 
             }
