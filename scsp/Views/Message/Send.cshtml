@@ -6,11 +6,44 @@
     var errormsg = @Model.errormsg;
     var from = @Model.from;
     var to = @Model.to;
+    var User = to;
+    string username = @User.UserID;
+    string fname = @User.FName;
+    string lname = @User.LName ?? "";
+    string bio = @User.Bio ?? "";
+    string name = fname + " " + lname;
+    string initials = @User.FName[0] + "" + (String.IsNullOrEmpty(@User.LName) ? "" : @User.LName[0]);
+    string avatardefault = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
     ViewData["Title"] = "Chat - " + to.UserID;
 }
-<a asp-action="Index" class="btn btn-outline-dark">&lt; Inbox</a>
-<h1>Chat with @to.UserID</h1>
-<hr />
+<div class="topbar sticky-top">
+    <a asp-action="Index" class="btn btn-outline-dark">&lt; Inbox</a> <br><br>
+    <div class="d-flex flex-row align-items-center">
+            <a class="text-reset text-decoration-none" asp-action="Explore" asp-controller="Profile" asp-route-id="@to.UserID">
+
+            @if (!String.IsNullOrEmpty(to.Photo))
+            {
+            <img src="data:image;base64,@to.Photo" class="rounded-circle" width=50 alt="photo">
+            } else{
+            <img src='@avatardefault' class="rounded-circle" width=50 alt="photo">
+            }
+            </a>
+
+            <div class="d-flex flex-column ms-2"> 
+                <span class="font-weight-bold">
+                    <a class="text-reset text-decoration-none" asp-action="Explore" asp-controller="Profile" asp-route-id="@to.UserID">
+                        @to.FName @to.LName
+                    </a>
+                </span> 
+                <small class="text-primary">
+                    <a class="text-reset text-decoration-none" asp-action="Explore" asp-controller="Profile" asp-route-id="@to.UserID">
+                        @to.UserID
+                    </a>
+                </small> 
+            </div>
+    </div>
+    <hr />
+</div>
 <div class="chats">
    <ul>
     @foreach (var msg in @messages)
@@ -53,4 +86,10 @@
     </style>
     <link href="@Url.Content("~/css/message.css")" rel="stylesheet" type="text/css" />
 
+}
+
+@section Scripts{
+    <script>
+        window.scrollTo(0, document.body.scrollHeight);
+    </script>
 }

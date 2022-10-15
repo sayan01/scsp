@@ -9,6 +9,15 @@
     border-radius: 50px;
 }
 
+.topbar{
+	background-color: white;
+	padding-top: 20px;
+}
+header{
+	display:none;
+}
+/* // chat bubbles  */
+
 ul { padding: 0; }
 ul > li {
 	position: relative;
@@ -16,7 +25,6 @@ ul > li {
 	display: block;
 	margin-top: 1.5rem;
 	margin: 1rem 0;
-	transition: 0.5s all;
 }
 ul > li:after {
 	display: table;
