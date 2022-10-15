@@ -19,5 +19,19 @@ namespace scsp.Controllers
             double seconds = epoch_seconds(date) - 1134028003;
             return Math.Round(sign * order + seconds / 45000, 7);
         }
+
+        public static double confidence(int likes, int dislikes){
+            var n = likes + dislikes;
+            if (n == 0) return 0;
+
+            var z = 1.281551565545;
+            var p = (double)(likes) / n;
+
+            var left = p + 1/(2*n)*z*z;
+            var right = z*Math.Sqrt(p*(1-p)/n + z*z/(4*n*n));
+            var under = 1+1/n*z*z;
+
+            return (left - right) / under; 
+        }
     }
 }

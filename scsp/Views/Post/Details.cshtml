@@ -112,13 +112,23 @@
                                 <a asp-action="Explore" asp-controller="Profile" asp-route-id="@Comment.Author.UserID">@User.FName @User.LName</a>
                                 </span>
                             <span class="be-comment-time">
-                                <i class="fa fa-clock-o"></i>
+                                <i class="fa fa-clock"></i>
                                 @Comment.Time
                             </span>
 
                             <p class="be-comment-text">
                                 @Comment.Content
                             </p>
+                        </div>
+                        <div class="likedislike">
+                            <span class="likes">
+                            <a class="text-decoration-none" asp-action="Like" asp-controller="Comment" asp-route-id="@Comment.CommentID"><i class="fa fa-thumbs-up"></i> Like</a>
+                            ( @Comment.Likes.Count )
+                            </span> | 
+                            <span class="dislikes">
+                            <a class="text-decoration-none" asp-action="Dislike" asp-controller="Comment" asp-route-id="@Comment.CommentID"><i class="fa fa-thumbs-down"></i> Dislike</a>
+                            ( @Comment.Dislikes.Count )
+                            </span>
                         </div>
                         </div>
                 }

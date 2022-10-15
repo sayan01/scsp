@@ -17,6 +17,8 @@ namespace scsp.Models
         public string AuthorId {get; set;} = "";
         [Required]
         public User Author {get; set; } = new User();
+        [ForeignKey("Post")]
+        public int PostId {get; set;} 
         [Required]
         public Post Post {get; set; } = new Post();
         [Required]

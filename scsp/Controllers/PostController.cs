@@ -52,6 +52,10 @@ namespace scsp.Controllers
             foreach (var Comment in Comments)
             {
                 Comment.Author = _context.User.FirstOrDefault(u => u.UserID == Comment.AuthorId) ?? new User();
+                var LikesComment = _context.LikeComment.Where( lc => lc.Comment == Comment).ToList() ?? new List<LikeComment>();
+                var DislikesComment = _context.DislikeComment.Where( dlc => dlc.Comment == Comment).ToList() ?? new List<DislikeComment>();
+                Comment.Likes = LikesComment;
+                Comment.Dislikes = DislikesComment;
             }
             var Likes = _context.LikePost.Where( lp => lp.Post == post).ToList() ?? new List<LikePost>();
             var Dislikes = _context.DislikePost.Where( dlp => dlp.Post == post).ToList() ?? new List<DislikePost>();
@@ -66,6 +70,10 @@ namespace scsp.Controllers
                 Dislike.Author = _context.User.FirstOrDefault(u => u.UserID == Dislike.AuthorId) ?? new User();
                 dislikedbyme = dislikedbyme || Dislike.Author == user;
             }
+            Comments.Sort((a,b) => 
+            HelperFunctions.confidence(a.Likes.Count,a.Dislikes.Count)
+            .CompareTo(HelperFunctions.confidence(b.Likes.Count, b.Dislikes.Count)));
+            Comments.Reverse();
             post.Comments = Comments;
             post.Likes = Likes;
             post.Dislikes = Dislikes;

@@ -30,7 +30,7 @@ namespace scsp.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("PostID")
+                    b.Property<int>("PostId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Time")
@@ -40,7 +40,7 @@ namespace scsp.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.HasIndex("PostID");
+                    b.HasIndex("PostId");
 
                     b.ToTable("Comment");
                 });
@@ -275,7 +275,7 @@ namespace scsp.Migrations
 
                     b.HasOne("scsp.Models.Post", "Post")
                         .WithMany("Comments")
-                        .HasForeignKey("PostID")
+                        .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

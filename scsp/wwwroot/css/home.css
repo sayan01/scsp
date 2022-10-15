@@ -91,7 +91,7 @@
 .be-comment-text {
     font-size: 13px;
     line-height: 18px;
-    color: #7a8192;
+    color: var(--bs-gray-800);
     display: block;
     background: #f6f6f7;
     border: 1px solid #edeff2;
