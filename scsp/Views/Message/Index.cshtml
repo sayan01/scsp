@@ -12,26 +12,46 @@
     </div>
 }
 <h1>Inbox</h1>
+<div class="row sideBar">
+@foreach (var kv in Model.Users) {
+        var User = kv.Key;
+        var Messages = kv.Value;
+        string username = @User.UserID;
+        string fname = @User.FName;
+        string lname = @User.LName ?? "";
+        string bio = @User.Bio ?? "";
+        string name = fname + " " + lname;
+        string initials = @User.FName[0] + "" + (String.IsNullOrEmpty(@User.LName) ? "" : @User.LName[0]);
+        string avatardefault = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
+        <a class="text-reset text-decoration-none" asp-action="Send" asp-route-id="@User.UserID" style="padding: 0px">
+        <div class="row sideBar-body">
+            <div class="col-sm-3 col-xs-3 sideBar-avatar">
+                <div class="avatar-icon">
+                    @if (String.IsNullOrEmpty(@User.Photo))
+                    {
+                        <img src='@avatardefault'>
+                    }else{
+                        <img src='data:image;base64,@User.Photo'>
+                    }
+                </div>
+            </div>
+            <div class="col-sm-9 col-xs-9 sideBar-main">
+                <div class="row">
+                    <div class="col-sm-8 col-xs-8 sideBar-name">
+                        <span class="name-meta">@fname @lname
+                        </span>
+                    </div>
+                    <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
+                        <span class="time-meta pull-right">@Messages messages
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </a>
+    }
+</div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Username</th>
-            <th>Name</th>
-            <th>Messages</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Users) {
-        <tr>
-            <td>@item.Key.UserID</td>
-            <td>@item.Key.FName @item.Key.LName</td>
-            <td>@item.Value</td>
-            <td>
-                <a asp-action="Send" asp-route-id="@item.Key.UserID">Open</a>
-            </td>
-        </tr>
+@section Styles{
+    <link href="@Url.Content("~/css/messageinbox.css")" rel="stylesheet" type="text/css" />
 }
-    </tbody>
-</table>
