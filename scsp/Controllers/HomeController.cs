@@ -49,6 +49,10 @@ public class HomeController : Controller
                 }
             }
         }
+        frndposts.Sort((a,b) => 
+            HelperFunctions.hotrank(a.Likes.Count,a.Dislikes.Count, a.Time)
+            .CompareTo(HelperFunctions.hotrank(b.Likes.Count, b.Dislikes.Count, b.Time)));
+        frndposts.Reverse();
         HomeIndexViewModel vm = new HomeIndexViewModel{
             currentuser = user,
             Followers = followers,
