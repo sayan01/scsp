@@ -35,7 +35,7 @@
 
                 @if (!String.IsNullOrEmpty(Post.Author.Photo))
                 {
-                <img src="data:image;base64,@Post.Author.Photo" class="rounded-circle" width=50 alt="photo">
+                <img src="data:image;base64,@Post.Author.Photo" class="rounded-circle" width=50 height=50 alt="photo" style="object-fit: cover;">
                 } else{
                 <img src='@avatardefault' class="rounded-circle" width=50 alt="photo">
                 }
@@ -54,7 +54,30 @@
                     </small> 
                 </div>
             </div>
-            <div class="d-flex flex-row mt-1 ellipsis"> <small class="mr-2">@Post.Time</small> </div>
+            <div class="d-flex flex-row mt-1 ellipsis"> <small class="mr-2 text-muted">
+                @{
+                    var td = DateTime.Now - Post.Time;
+                    var days = td.Days;
+                    var hours = td.Hours;
+                    var mins = td.Minutes;
+                    var secs = td.Seconds;
+                    var timetext = "";
+                    if(days > 0){
+                        timetext = days + " day" + (days == 1 ? "" : "s") + " ago";
+                    } else if(hours > 0){
+                        timetext = hours + " hour" + (hours == 1 ? "" : "s") + " ago";
+                    }
+                        else if(mins > 0){
+                        timetext = mins + " minute" + (mins == 1 ? "" : "s") + " ago";
+                    }
+                        else if(secs > 0){
+                        timetext = secs + " second" + (secs == 1 ? "" : "s") + " ago";
+                    } else {
+                        timetext = "Now";
+                    }
+                }
+                @timetext
+            </small> </div>
         </div> 
         @if (!String.IsNullOrEmpty(Post.Photo))
         {
@@ -101,7 +124,7 @@
                             <a asp-action="Explore" asp-controller="Profile" asp-route-id="@Comment.Author.UserID">
                                 @if (!String.IsNullOrEmpty(Comment.Author.Photo))
                                 {
-                                <img src="data:image;base64,@Comment.Author.Photo" alt="" class="be-ava-comment" style="object-fit: cover">
+                                <img src="data:image;base64,@Comment.Author.Photo" alt="" class="be-ava-comment" style="object-fit: cover;">
                                 } else{
                                 <img src='@avatardefault' alt="" class="be-ava-comment">
                                 }
@@ -113,7 +136,28 @@
                                 </span>
                             <span class="be-comment-time">
                                 <i class="fa fa-clock"></i>
-                                @Comment.Time
+                                @{
+                                    td = DateTime.Now - Comment.Time;
+                                    days = td.Days;
+                                    hours = td.Hours;
+                                    mins = td.Minutes;
+                                    secs = td.Seconds;
+                                    timetext = "";
+                                    if(days > 0){
+                                        timetext = days + " day" + (days == 1 ? "" : "s") + " ago";
+                                    } else if(hours > 0){
+                                        timetext = hours + " hour" + (hours == 1 ? "" : "s") + " ago";
+                                    }
+                                        else if(mins > 0){
+                                        timetext = mins + " minute" + (mins == 1 ? "" : "s") + " ago";
+                                    }
+                                        else if(secs > 0){
+                                        timetext = secs + " second" + (secs == 1 ? "" : "s") + " ago";
+                                    } else {
+                                        timetext = "Now";
+                                    }
+                                }
+                                @timetext
                             </span>
 
                             <p class="be-comment-text">

@@ -19,9 +19,7 @@
     <table class="table align-middle mb-0 bg-white">
     <thead class="bg-light">
         <tr>
-        <th>Name</th>
-        <th>Bio</th>
-        <th>Options</th>
+        <th>Users</th>
         </tr>
     </thead>
     <tbody>
@@ -46,13 +44,6 @@
                     </div>
                 </div>
                 </a>
-            </td>
-            <td>
-                <p class="fw-normal mb-1">@User.Bio</p>
-            </td>
-            <td>
-                <a asp-action="Explore" asp-controller="Profile" asp-route-id="@User.UserID" class="btn btn-outline-primary"><i class="fas fa-user-circle"></i> Open</a>
-                <a asp-action="Send" asp-controller="Message" asp-route-id="@User.UserID" class="btn btn-outline-success"><i class="fas fa-comments"></i> Message</a>
             </td>
             </tr>
         }

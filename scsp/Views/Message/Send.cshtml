@@ -23,7 +23,7 @@
 
             @if (!String.IsNullOrEmpty(to.Photo))
             {
-            <img src="data:image;base64,@to.Photo" class="rounded-circle" width=50 alt="photo">
+            <img src="data:image;base64,@to.Photo" class="rounded-circle" width=50 height=50 style="object-fit: cover;" alt="photo">
             } else{
             <img src='@avatardefault' class="rounded-circle" width=50 alt="photo">
             }

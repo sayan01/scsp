@@ -99,8 +99,29 @@
                           Delete
                         </a>
                       </div>
-                      <div class="card-footer">
-                        @Post.Time
+                      <div class="card-footer text-muted">
+                        @{
+                          var td = DateTime.Now - Post.Time;
+                          var days = td.Days;
+                          var hours = td.Hours;
+                          var mins = td.Minutes;
+                          var secs = td.Seconds;
+                          var timetext = "";
+                          if(days > 0){
+                              timetext = days + " day" + (days == 1 ? "" : "s") + " ago";
+                          } else if(hours > 0){
+                              timetext = hours + " hour" + (hours == 1 ? "" : "s") + " ago";
+                          }
+                              else if(mins > 0){
+                              timetext = mins + " minute" + (mins == 1 ? "" : "s") + " ago";
+                          }
+                              else if(secs > 0){
+                              timetext = secs + " second" + (secs == 1 ? "" : "s") + " ago";
+                          } else {
+                              timetext = "Now";
+                          }
+                      }
+                      @timetext
                       </div>
                     </div>
                     </a>
