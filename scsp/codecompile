@@ -1,0 +1,2 @@
+find | grep '\.cs' | grep -v 'Migration' | grep -v '/obj/' | grep -v 'wwwroot/lib/' > codefiles.txt
+for file in $(cat codefiles.txt); do echo ; echo ; echo $file ; echo; echo; cat $file ; done > codesrc.txt
