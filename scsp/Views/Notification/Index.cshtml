@@ -1,0 +1,104 @@
+@model scsp.ViewModels.NotificationIndexViewModel
+@{
+    ViewData["Title"] = "Notifications";
+    var currentuser = @Model.currentuser;
+    ViewBag.currentuser = currentuser;
+
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/notifications.css")" rel="stylesheet" type="text/css" />
+}
+
+<div class="results">
+    <table class="table align-middle mb-0 bg-white">
+    <thead class="bg-light">
+        <tr>
+        <th>Notifications</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Comment in @Model.comments)
+        {
+            var User = @Comment.Author;
+            <tr>
+            <td>
+                <a asp-controller="Post" asp-action="Details" asp-route-id="@Comment.PostId" class="text-reset text-decoration-none">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="notification-content d-flex flex-row align-items-center">
+                        <div class="photo">
+                            @if (String.IsNullOrEmpty(@User.Photo))
+                            {
+                                string initials = @User.FName[0] + "" + (String.IsNullOrEmpty(@User.LName) ? "" : @User.LName[0]);
+                                string avatardefault = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
+                                <img src="@avatardefault" 
+                                    alt="" 
+                                    style="width: 45px; height: 45px; object-fit: cover; flex-shrink: 0;" 
+                                    class="rounded-circle" />
+                            } else {
+                                <img src="data:image/;base64,@User.Photo" alt="" style="width: 45px; height: 45px; object-fit: cover" class="rounded-circle" />
+                            }
+                        </div>
+                        <div class="ms-3">
+                            <p class="mb-1">
+                                @if (@User == @currentuser)
+                                {
+                                    <strong>You</strong>
+                                } else {
+                                    <strong>
+                                    @User.FName @User.LName
+                                    </strong>
+                                }
+                                commented 
+                                "@Comment.Content"
+                                on your post titled
+                                <em>
+                                "@Comment.Post.Content"
+                                </em>
+                            </p>
+                        </div>
+                    </div>
+                    @* <div class="postphoto me-5">
+                        @if(!String.IsNullOrEmpty(Comment.Post.Photo)){
+                            <img src="data:image/;base64,@Comment.Post.Photo" alt="" style="width: 45px; height: 45px; object-fit: cover" class="rounded-circle" />
+                        }
+                    </div> *@
+
+                    <div class="time text-muted ms-3" style="text-align: right; flex-shrink: 0">
+                        @{
+                            var td = DateTime.Now - Comment.Time;
+                            var days = td.Days;
+                            var hours = td.Hours;
+                            var mins = td.Minutes;
+                            var secs = td.Seconds;
+                            var timetext = "";
+                            if(days > 0){
+                                timetext = days + " day" + (days == 1 ? "" : "s") + " ago";
+                            } else if(hours > 0){
+                                timetext = hours + " hour" + (hours == 1 ? "" : "s") + " ago";
+                            }
+                            else if(mins > 0){
+                                timetext = mins + " minute" + (mins == 1 ? "" : "s") + " ago";
+                            }
+                            else if(secs > 0){
+                                timetext = secs + " second" + (secs == 1 ? "" : "s") + " ago";
+                            } else {
+                                timetext = "Now";
+                            }
+                        }
+                        @timetext
+                    </div>
+                    
+                </div>
+                </a>
+            </td>
+            </tr>
+        }
+    </tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <script>
+    </script>
+}

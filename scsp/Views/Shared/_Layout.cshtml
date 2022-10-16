@@ -86,11 +86,14 @@ button.accept-policy {
                         <li class="nav-item normallinks">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Message" asp-action="Index">Messages</a>
                         </li>
-                        <li class="nav-item normallinks">
+                        @* <li class="nav-item normallinks">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Profile" asp-action="Index">Profile</a>
-                        </li>
+                        </li> *@
                          <li class="nav-item normallinks">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Explore" asp-action="Index">Explore</a>
+                        </li>
+                        <li class="nav-item normallinks">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Notification" asp-action="Index">Notifications</a>
                         </li>
                         <li class="nav-item normallinks">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Donation" asp-action="Index">Donations</a>
@@ -121,7 +124,7 @@ button.accept-policy {
                     @if (User != null)
                     {
                             @* profile photo *@
-                            <div class="userlinks">
+                            <div class="me-2">
                                 <a class="text-decoration-none text-dark" asp-controller="Profile" asp-action="Index">
                                     @if (String.IsNullOrEmpty(@User.Photo))
                                     {
