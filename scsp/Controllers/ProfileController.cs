@@ -170,7 +170,7 @@ public class ProfileController : Controller
             }
             string photo = "";
             if(file != null && file.Length > 0){
-                if(file.Length > 4 * 1000 * 1000) return RedirectToAction(nameof(UpdateDP), new {msg="File is too big. Max size is 4MB"});
+                if(file.Length > 1 * 1000 * 1000) return RedirectToAction(nameof(UpdateDP), new {msg="File is too big. Max size is 1MB"});
                 if(!file.FileName.ToLower().EndsWith(".png") && !file.FileName.ToLower().EndsWith(".jpg") )
                     return  RedirectToAction(nameof(UpdateDP), new {msg="Only .jpg or .png files are allowed"});
                 // return RedirectToAction(nameof(UpdateDP), new {msg="Roadblock temporary"});

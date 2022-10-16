@@ -79,6 +79,7 @@
                 @for (int j = 0; j < 2 && i*2 + j < @Model.Posts.Count; j++){
                   var Post = Model.Posts.ToList()[i*2+j];
                   <div class="col">
+                    <a class="text-reset text-decoration-none" asp-action="Details" asp-controller="Post" asp-route-id="@Post.PostID">
                     <div class="card">
                       @if (!String.IsNullOrEmpty(Post.Photo))
                       {
@@ -102,6 +103,7 @@
                         @Post.Time
                       </div>
                     </div>
+                    </a>
                   </div>
                 }
               </div>

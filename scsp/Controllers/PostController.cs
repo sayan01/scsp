@@ -91,11 +91,12 @@ namespace scsp.Controllers
 
         // GET: Post/Create
         [Authorize]
-        public IActionResult Create(string message, string alert = "danger")
+        public IActionResult Create(string message, string content="", string alert = "danger")
         {
             PostCreateViewModel vm = new PostCreateViewModel(){
                 AlertMsg = message,
                 AlertType = alert,
+                Content = content,
             };
             return View(vm);
         }
@@ -113,6 +114,12 @@ namespace scsp.Controllers
             }
             string photo = "";
             if(file != null && file.Length > 0){
+                string errormsg = "";
+                if(file.Length > 1 * 1000 * 1000) errormsg += "File is too big. Max size is 1MB.";
+                if(!file.FileName.ToLower().EndsWith(".png") && !file.FileName.ToLower().EndsWith(".jpg") )
+                    errormsg += "Only .jpg or .png files are allowed";
+                if(!String.IsNullOrEmpty(errormsg))
+                    return  RedirectToAction(nameof(Create), new {message=errormsg, content=content});
                 using(var target = new MemoryStream()){
                     file.CopyTo(target);
                     var barray = target.ToArray();
@@ -134,7 +141,7 @@ namespace scsp.Controllers
             try{
                 _context.Add(post);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index),"Home");
+                return RedirectToAction(nameof(Index),"Profile");
             }catch (Exception e){
                 Console.WriteLine(e);
                 PostCreateViewModel vm = new PostCreateViewModel{
@@ -197,7 +204,7 @@ namespace scsp.Controllers
             }
             _context.Post.Remove(post);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index), "Home");
+            return RedirectToAction(nameof(Index), "Profile");
         }
 
         // GET: Post/Like/5
