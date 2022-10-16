@@ -5,13 +5,11 @@
 }
 
 @section Styles {
-    <link href="@Url.Content("~/css/register.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/login.css")" rel="stylesheet" type="text/css" />
 }
 
 
 <div class="text-center">
-    <h1 class="display-4">Social Content Sharing Platform</h1>
-    <h1 class="display-5">Register</h1>
     @if (!String.IsNullOrEmpty(@Model.AlertMsg))
     {
         string alert = @Model.AlertType;
@@ -22,7 +20,54 @@
     }
 </div>
 
-<div class="row">
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-7 col-lg-5">
+                <div class="wrap">
+                    <div class="login-wrap p-4 p-md-5">
+                        <div class="d-flex">
+                            <div class="w-100">
+                                <h3 class="mb-4">Register</h3>
+                            </div>
+                        </div>
+                        <form asp-action="Register" id="register-form" class="signin-form">
+                            <div class="form-group mt-3">
+                                <input placeholder="Username" type="text" class="form-control" required maxlength="32" minlength="1" name="username" id="username">
+                                <label class="form-control-placeholder" for="username">Username <span class="text text-danger">*</span></label>                                
+                            </div>
+                            <div class="form-group">
+                                <input id="password" type="password" class="form-control" required minlength="8" name="password" placeholder="Password">
+                                <label class="form-control-placeholder" for="password">Password <span class="text text-danger">*</span></label>
+                                <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                                <span class="password-minlength">Password should be atleast 8 characters</span>
+                            </div>
+                            <div class="form-group mt-3">
+                                <input placeholder="First Name" type="text" class="form-control" required maxlength="32" minlength="1" name="FName" id="FName">
+                                <label class="form-control-placeholder" for="FName">First Name <span class="text text-danger">*</span></label>                                
+                            </div>
+                            <div class="form-group mt-3">
+                                <input placeholder="Last Name" type="text" class="form-control" maxlength="32" name="LName" id="LName">
+                                <label class="form-control-placeholder" for="FName">Last Name</label>                                
+                            </div>
+                            <div class="form-group mt-3">
+                                <input placeholder="Bio" type="text" class="form-control" maxlength="250" name="Bio" id="Bio">
+                                <label class="form-control-placeholder" for="FName">Bio</label>                                
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="form-control btn btn-primary rounded submit px-3">Register</button>
+                            </div>
+                        </form>
+                        <p class="text-center">Already a member? <a asp-action="Login">Login</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* <div class="row">
     <div class="col-md-4">
         <form asp-action="Register" id="register-form">
             <div class="form-group">
@@ -58,7 +103,7 @@
 <br><hr><br>
 <div class="text-center">
     Already an user? <a asp-action="Login">Login</a>
-</div>
+</div> *@
 
 @section Scripts {
     
