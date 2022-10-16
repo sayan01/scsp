@@ -31,18 +31,28 @@ namespace scsp.Controllers
                 return RedirectToAction("Logout", "Authentication");
             }
               return _context.Donation != null ? 
-                          View(await _context.Donation.Where(d => d.User == user).ToListAsync()) :
+                          View(new DonationIndexViewModel {
+                            currentuser = user,
+                            Donations = await _context.Donation.Where(d => d.User == user).ToListAsync()}) :
                           Content("Entity set 'SCSPDataContext.Donation'  is null.");
         }
 
         
         // GET: Donation/Create
+        [Authorize]
         public IActionResult Create(string message = "", string alert = "", double amount = 0.0)
         {
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : null;
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(user == null){
+                return RedirectToAction("Logout", "Authentication");
+            }
             DonationCreateViewModel vm = new DonationCreateViewModel(){
                 AlertMsg = message,
                 AlertType = alert,
                 Amount = amount,
+                currentuser = user,
             };
             return View(vm);
         }
@@ -50,6 +60,7 @@ namespace scsp.Controllers
         // POST: Donation/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(double amount)

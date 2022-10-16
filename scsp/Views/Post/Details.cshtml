@@ -4,6 +4,7 @@
     ViewData["Title"] = "Details";
     var Post = @Model.Post;
     var User = @Post.Author;
+    ViewBag.currentuser = @Model.currentuser;
     string username = @User.UserID;
     string fname = @User.FName;
     string lname = @User.LName ?? "";

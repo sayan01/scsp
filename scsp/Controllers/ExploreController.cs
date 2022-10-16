@@ -29,6 +29,7 @@ public class ExploreController : Controller
         }
         ExploreIndexViewModel vm = new ExploreIndexViewModel{
             Users = _context.User.ToList(),
+            currentuser = user
         };
         return View(vm);
     }
@@ -46,6 +47,7 @@ public class ExploreController : Controller
         }
         ExploreIndexViewModel vm = new ExploreIndexViewModel{
             query = query,
+            currentuser = user,
             Users = _context.User.Where(u => u.UserID.ToLower().Contains(query) || u.FName.ToLower().Contains(query) || (u.LName??"").ToLower().Contains(query)).ToList()
         };
         return View(vm);

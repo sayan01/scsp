@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Profile";
     var User = @Model.user;
+    ViewBag.currentuser = @Model.currentuser;
     string username = @User.UserID;
     string fname = @User.FName;
     string lname = @User.LName ?? "";
@@ -56,7 +57,13 @@
               <p>@username</p>
             </div>
           </div>
-          <div class="p-4 text-black" style="background-color: #f8f9fa;">
+          <div class="p-4 text-black stats-box" style="background-color: #f8f9fa;">
+              @if (hefollowsme)
+              {
+                <div class="followsyou text-muted">
+                  follows you
+              </div>
+              }
             <div class="d-flex justify-content-end text-center py-1">
               <div>
                 <p class="mb-1 h5">@Model.Posts.Count</p>

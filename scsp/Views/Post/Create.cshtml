@@ -1,6 +1,7 @@
 @model scsp.ViewModels.PostCreateViewModel
 @{
     ViewData["Title"] = "Create";
+    ViewBag.currentuser = @Model.currentuser;
 }
 
 <h1>Create</h1>
@@ -33,7 +34,7 @@
                 <input type="submit" value="Create" class="btn btn-success" required/>
             </span>
             <span>
-                <a class="btn btn-outline-danger" href="javascript: history.go(-1)">Cancel</a>
+                <a class="btn btn-outline-danger" asp-action="Index" asp-controller="Profile">Cancel</a>
             </span>
         </form>
     </div>

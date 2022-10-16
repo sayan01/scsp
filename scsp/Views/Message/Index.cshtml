@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Inbox";
+    ViewBag.currentuser = @Model.from;
 }
 @if (!String.IsNullOrEmpty(@Model.errormsg))
 {

@@ -9,3 +9,10 @@
     border: 2px solid var(--bs-gray-500);
     transition: all 0.05s ease-in-out;
 }
+.stats-box{
+    position: relative;
+}
+.followsyou{
+    position: absolute;
+    bottom: 10px;
+}

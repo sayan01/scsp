@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Profile";
     var User = @Model.currentuser;
+    ViewBag.currentuser = User;
     string username = @User.UserID;
     string fname = @User.FName;
     string lname = @User.LName ?? "";

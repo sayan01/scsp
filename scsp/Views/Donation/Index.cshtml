@@ -1,7 +1,8 @@
-@model IEnumerable<scsp.Models.Donation>
+@model scsp.ViewModels.DonationIndexViewModel
 
 @{
     ViewData["Title"] = "Index";
+    ViewBag.currentuser = @Model.currentuser;
 }
 
 <h1>Index</h1>
@@ -18,7 +19,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Donations) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Time)

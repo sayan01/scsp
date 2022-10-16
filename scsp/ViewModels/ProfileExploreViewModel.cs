@@ -13,5 +13,6 @@ namespace scsp.ViewModels
         public ICollection<Foll> Following {get; set;} = new List<Foll>();
         public bool ifollowhim {get; set;}
         public bool hefollowsme {get; set;}
+        public User currentuser {get; set;} = new User();
     }
 }

@@ -6,11 +6,11 @@ using scsp.Models;
 
 namespace scsp.ViewModels
 {
-    public class DonationCreateViewModel
+    public class DonationIndexViewModel
     {
         public string AlertMsg {get; set;} = "";
         public string AlertType {get; set;} = "";
-        public double Amount {get; set;}
+        public List<Donation> Donations {get; set;} = new List<Donation>();
         public User currentuser {get; set;} = new User();
     }
 }

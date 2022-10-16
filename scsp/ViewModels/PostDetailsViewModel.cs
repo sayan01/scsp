@@ -10,6 +10,7 @@ namespace scsp.ViewModels
         public string AlertMsg {get; set;} = "";
         public string AlertType {get; set;} = "danger";
         public Post Post {get; set;} = new Post();
+        public User currentuser {get; set; } = new User();
         public bool likedbyme {get; set;}
         public bool dislikedbyme {get; set;}
     }

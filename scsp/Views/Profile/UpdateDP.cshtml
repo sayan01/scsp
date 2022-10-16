@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Update Display Picture - Profile";
+    ViewBag.currentuser = @Model.currentuser;
     string username = @Model.currentuser.UserID;
     string fname = @Model.currentuser.FName;
     string lname = @Model.currentuser.LName ?? "";

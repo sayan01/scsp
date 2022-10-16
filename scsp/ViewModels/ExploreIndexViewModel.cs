@@ -12,6 +12,7 @@ namespace scsp.ViewModels
         public List<User> Users {get; set;} = new List<User>();
         public string AlertMsg {get; set; } = "";
         public string AlertType {get; set;} = "";
+        public User currentuser {get; set;} = new User();
         
     }
 }

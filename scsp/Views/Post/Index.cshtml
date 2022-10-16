@@ -46,7 +46,12 @@
                 @item.Author.UserID
             </td>
             <td>
-                @item.Photo.Substring(0,10) ...
+                @if (String.IsNullOrEmpty(item.Photo))
+                {
+                    <span>@item.Photo</span>
+                } else{
+                    <span>@item.Photo.Substring(0,10) ...</span>
+                }
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.PostID">Details</a> |

@@ -87,6 +87,7 @@ public class ProfileController : Controller
             Following = following,
             ifollowhim = ifollowhim,
             hefollowsme = hefollowsme,
+            currentuser = cuser
         };
         return View(vm);
     }

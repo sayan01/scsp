@@ -84,6 +84,7 @@ namespace scsp.Controllers
                 AlertType = "",
                 likedbyme = likedbyme,
                 dislikedbyme = dislikedbyme,
+                currentuser = user,
             };
 
             return View(vm);
@@ -93,10 +94,17 @@ namespace scsp.Controllers
         [Authorize]
         public IActionResult Create(string message, string content="", string alert = "danger")
         {
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : null;
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(user == null){
+                return RedirectToAction("Logout", "Authentication");
+            }
             PostCreateViewModel vm = new PostCreateViewModel(){
                 AlertMsg = message,
                 AlertType = alert,
                 Content = content,
+                currentuser = user,
             };
             return View(vm);
         }
@@ -146,7 +154,8 @@ namespace scsp.Controllers
                 Console.WriteLine(e);
                 PostCreateViewModel vm = new PostCreateViewModel{
                     AlertMsg = "Something Went Wrong\n" + e.Message,
-                    Content = content
+                    Content = content,
+                    currentuser = user,
                 };
                 return View(vm);
             }
