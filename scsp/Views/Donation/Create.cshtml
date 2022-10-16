@@ -27,7 +27,7 @@
             </div>
             <br>
             <span class="form-group">
-                <input type="submit" value="Donate" class="btn btn-primary" />
+                <input type="submit" value="Donate" class="btn btn-primary" id="submit" onclick="opensite()"/>
             </span>
             <span>
                 <a asp-action="Index" class="btn btn-outline-danger">Cancel</a>
@@ -36,3 +36,10 @@
     </div>
 </div>
 
+@section Scripts{
+    <script>
+        function opensite(){
+            window.open('https://rzp.io/l/tDfWB9zd', '_blank');
+        }
+    </script>
+}
