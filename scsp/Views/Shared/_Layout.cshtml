@@ -110,35 +110,18 @@ button.accept-policy {
                     </ul>
                     @{
                         var User = (User)ViewBag.currentuser;
-                        string avatardefault = "";
-                        if(User != null){
-                            string username = @User.UserID;
-                            string fname = @User.FName;
-                            string lname = @User.LName ?? "";
-                            string bio = @User.Bio ?? "";
-                            string name = fname + " " + lname;
-                            string initials = @User.FName[0] + "" + (String.IsNullOrEmpty(@User.LName) ? "" : @User.LName[0]);
-                            avatardefault = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
-                        }
-                    }
-                    @if (User != null)
-                    {
+                        if (User != null)
+                        {
                             @* profile photo *@
                             <div class="me-2">
                                 <a class="text-decoration-none text-dark" asp-controller="Profile" asp-action="Index">
-                                    @if (String.IsNullOrEmpty(@User.Photo))
-                                    {
-                                        <img src='@avatardefault'
-                                        alt="profile photo" class="img-fluid"
-                                        style="width: 46px; height: 46px; object-fit: cover; z-index: 1; border-radius: 50%">
-                                    }else{
-                                        <img src='data:image;base64,@User.Photo'
-                                        alt="profile photo" class="img-fluid"
-                                        style="width: 46px; height: 46px; object-fit: cover; z-index: 1; border-radius: 50%">
-                                    }
+                                    <img src='@User.Photo'
+                                    alt="profile photo" class="img-fluid"
+                                    style="width: 46px; height: 46px; object-fit: cover; z-index: 1; border-radius: 50%; border: 1px solid var(--bs-gray-500);">
                                     @User.FName
                                 </a>
                             </div>
+                        }
                     }
                 </div>
             </div>

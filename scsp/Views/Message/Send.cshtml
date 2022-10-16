@@ -7,26 +7,13 @@
     var from = @Model.from;
     var to = @Model.to;
     var User = to;
-    string username = @User.UserID;
-    string fname = @User.FName;
-    string lname = @User.LName ?? "";
-    string bio = @User.Bio ?? "";
-    string name = fname + " " + lname;
-    string initials = @User.FName[0] + "" + (String.IsNullOrEmpty(@User.LName) ? "" : @User.LName[0]);
-    string avatardefault = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
     ViewData["Title"] = "Chat - " + to.UserID;
 }
 <div class="topbar sticky-top">
     <a asp-action="Index" class="btn btn-outline-dark">&lt; Inbox</a> <br><br>
     <div class="d-flex flex-row align-items-center">
             <a class="text-reset text-decoration-none" asp-action="Explore" asp-controller="Profile" asp-route-id="@to.UserID">
-
-            @if (!String.IsNullOrEmpty(to.Photo))
-            {
-            <img src="data:image;base64,@to.Photo" class="rounded-circle" width=50 height=50 style="object-fit: cover;" alt="photo">
-            } else{
-            <img src='@avatardefault' class="rounded-circle" width=50 alt="photo">
-            }
+            <img src="@to.Photo" class="rounded-circle" width=50 height=50 style="object-fit: cover;" alt="photo">
             </a>
 
             <div class="d-flex flex-column ms-2"> 

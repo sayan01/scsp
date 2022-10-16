@@ -169,7 +169,8 @@ public class ProfileController : Controller
             if (user == null || cusername != username){
                 return RedirectToAction("Logout", "Authentication");
             }
-            string photo = "";
+            string initials = (String.IsNullOrEmpty(user.FName) ? "" : user.FName[0]) + "" + (String.IsNullOrEmpty(user.LName) ? "" : user.LName[0]);
+            string photo = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
             if(file != null && file.Length > 0){
                 if(file.Length > 1 * 1000 * 1000) return RedirectToAction(nameof(UpdateDP), new {msg="File is too big. Max size is 1MB"});
                 if(!file.FileName.ToLower().EndsWith(".png") && !file.FileName.ToLower().EndsWith(".jpg") )
@@ -178,7 +179,7 @@ public class ProfileController : Controller
                 using(var target = new MemoryStream()){
                     file.CopyTo(target);
                     var barray = target.ToArray();
-                    photo = Convert.ToBase64String(barray);
+                    photo = "data:image/;base64," + Convert.ToBase64String(barray);
                 }
             }
             user.Photo = photo;

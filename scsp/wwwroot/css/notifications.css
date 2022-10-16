@@ -1,0 +1,7 @@
+td{
+    background-color: white;
+    transition: all 200ms ease;
+}
+td:hover{
+    background-color: var(--bs-gray-400);
+}

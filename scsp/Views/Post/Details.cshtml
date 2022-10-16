@@ -5,13 +5,6 @@
     var Post = @Model.Post;
     var User = @Post.Author;
     ViewBag.currentuser = @Model.currentuser;
-    string username = @User.UserID;
-    string fname = @User.FName;
-    string lname = @User.LName ?? "";
-    string bio = @User.Bio ?? "";
-    string name = fname + " " + lname;
-    string initials = @User.FName[0] + "" + (String.IsNullOrEmpty(@User.LName) ? "" : @User.LName[0]);
-    string avatardefault = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
     bool likedbyme = @Model.likedbyme;
     bool dislikedbyme = @Model.dislikedbyme;
     string like_btn_design = likedbyme ? "btn-success" : "btn-outline-success";
@@ -33,13 +26,7 @@
         <div class="d-flex justify-content-between p-2 px-3">
             <div class="d-flex flex-row align-items-center"> 
                 <a class="text-reset text-decoration-none" asp-action="Explore" asp-controller="Profile" asp-route-id="@Post.AuthorId">
-
-                @if (!String.IsNullOrEmpty(Post.Author.Photo))
-                {
-                <img src="data:image;base64,@Post.Author.Photo" class="rounded-circle" width=50 height=50 alt="photo" style="object-fit: cover;">
-                } else{
-                <img src='@avatardefault' class="rounded-circle" width=50 alt="photo">
-                }
+                <img src="@Post.Author.Photo" class="rounded-circle" width=50 height=50 alt="photo" style="object-fit: cover;">
                 </a>
 
                 <div class="d-flex flex-column ms-2"> 
@@ -112,23 +99,10 @@
                 <h1 class="comments-title">Comments (@Post.Comments.Count)</h1>
                 @foreach (var Comment in Post.Comments)
                 {
-                    User = @Comment.Author;
-                    username = @User.UserID;
-                    fname = @User.FName;
-                    lname = @User.LName ?? "";
-                    bio = @User.Bio ?? "";
-                    name = fname + " " + lname;
-                    initials = @User.FName[0] + "" + (String.IsNullOrEmpty(@User.LName) ? "" : @User.LName[0]);
-                    avatardefault = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
                     <div class="be-comment">
                         <div class="be-img-comment">	
                             <a asp-action="Explore" asp-controller="Profile" asp-route-id="@Comment.Author.UserID">
-                                @if (!String.IsNullOrEmpty(Comment.Author.Photo))
-                                {
-                                <img src="data:image;base64,@Comment.Author.Photo" alt="" class="be-ava-comment" style="object-fit: cover;">
-                                } else{
-                                <img src='@avatardefault' alt="" class="be-ava-comment">
-                                }
+                                <img src="@Comment.Author.Photo" alt="" class="be-ava-comment" style="object-fit: cover;">
                             </a>
                         </div>
                         <div class="be-comment-content">

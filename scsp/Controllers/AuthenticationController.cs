@@ -76,6 +76,8 @@ namespace scsp.Controllers
             user.FName = fname;
             user.LName = lname ?? "";
             user.Bio = bio ?? "";
+            string initials = (String.IsNullOrEmpty(fname) ? "" : fname[0]) + "" + (String.IsNullOrEmpty(lname) ? "" : lname[0]);
+            user.Photo = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
             user.Follows = new List<Foll>();
             user.FollowedBy = new List<Foll>();
             user.Posts = new List<Post>();

@@ -8,8 +8,6 @@
     string lname = @User.LName ?? "";
     string bio = @User.Bio ?? "";
     string name = fname + " " + lname;
-    string initials = @User.FName[0] + "" + (String.IsNullOrEmpty(@User.LName) ? "" : @User.LName[0]);
-    string avatardefault = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
     var ifollowhim = @Model.ifollowhim;
     var hefollowsme = @Model.hefollowsme;
     var follow_design = ifollowhim ? "btn-success" : "btn-outline-success";
@@ -27,16 +25,9 @@
         <div class="card">
           <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
             <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-              @if (String.IsNullOrEmpty(@Model.user.Photo))
-              {
-                <img src='@avatardefault'
-                alt="profile photo" class="img-fluid img-thumbnail mt-4 mb-2"
-                style="width: 150px; z-index: 1; border-radius: 50%">
-              }else{
-                <img src='data:image;base64,@Model.user.Photo'
-                alt="profile photo" class="img-fluid img-thumbnail mt-4 mb-2"
-                style="width: 150px; height: 150px; object-fit: cover; z-index: 1; border-radius: 50%">
-              }
+              <img src='@Model.user.Photo'
+              alt="profile photo" class="img-fluid img-thumbnail mt-4 mb-2"
+              style="width: 150px; height: 150px; object-fit: cover; z-index: 1; border-radius: 50%">
              <div class="buttons d-flex flex-row" style="z-index: 1;">
                <a type="button" class="btn @follow_design me-2 d-flex flex-row align-items-center" asp-action="Follow" asp-controller="Profile" asp-route-id="@username">
                 <i class="fas fa-user-plus"></i> 

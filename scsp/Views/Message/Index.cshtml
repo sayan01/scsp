@@ -20,20 +20,11 @@
         string username = @User.UserID;
         string fname = @User.FName;
         string lname = @User.LName ?? "";
-        string bio = @User.Bio ?? "";
-        string name = fname + " " + lname;
-        string initials = @User.FName[0] + "" + (String.IsNullOrEmpty(@User.LName) ? "" : @User.LName[0]);
-        string avatardefault = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
         <a class="text-reset text-decoration-none" asp-action="Send" asp-route-id="@User.UserID" style="padding: 0px">
         <div class="row sideBar-body">
             <div class="col-sm-3 col-xs-3 sideBar-avatar">
                 <div class="avatar-icon">
-                    @if (String.IsNullOrEmpty(@User.Photo))
-                    {
-                        <img src='@avatardefault'>
-                    }else{
-                        <img src='data:image;base64,@User.Photo' style="object-fit: cover;">
-                    }
+                    <img src='@User.Photo' style="object-fit: cover;">
                 </div>
             </div>
             <div class="col-sm-9 col-xs-9 sideBar-main">

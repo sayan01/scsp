@@ -27,17 +27,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="notification-content d-flex flex-row align-items-center">
                         <div class="photo">
-                            @if (String.IsNullOrEmpty(@User.Photo))
-                            {
-                                string initials = @User.FName[0] + "" + (String.IsNullOrEmpty(@User.LName) ? "" : @User.LName[0]);
-                                string avatardefault = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
-                                <img src="@avatardefault" 
-                                    alt="" 
-                                    style="width: 45px; height: 45px; object-fit: cover; flex-shrink: 0;" 
-                                    class="rounded-circle" />
-                            } else {
-                                <img src="data:image/;base64,@User.Photo" alt="" style="width: 45px; height: 45px; object-fit: cover" class="rounded-circle" />
-                            }
+                            <img src="@User.Photo" alt="" style="width: 45px; height: 45px; object-fit: cover" class="rounded-circle" />
                         </div>
                         <div class="ms-3">
                             <p class="mb-1">

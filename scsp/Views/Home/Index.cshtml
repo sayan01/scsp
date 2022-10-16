@@ -11,30 +11,18 @@
 
 
 <div class="text-center">
-    <h1 class="display-4">Home</h1>
+    <h1 class="display-4">Feed</h1>
     <h5 class="text-secondary">Welcome @Model.currentuser.FName</h1>
     <a class="btn btn-outline-primary" asp-action="Create" asp-controller="Post"><i class="fa-solid fa-plus"></i> New Post</a>
     <br><hr><br>
     @foreach (var Post in @Posts)
         {
-          var User = @Post.Author;
-          string username = @User.UserID;
-          string fname = @User.FName;
-          string lname = @User.LName ?? "";
-          string bio = @User.Bio ?? "";
-          string name = fname + " " + lname;
-          string initials = @User.FName[0] + "" + (String.IsNullOrEmpty(@User.LName) ? "" : @User.LName[0]);
-          string avatardefault = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
           <a class="text-reset text-decoration-none" asp-action="Details" asp-controller="Post" asp-route-id="@Post.PostID">
           <div class="card">
             <div class="d-flex justify-content-between p-2 px-3">
                 <div class="d-flex flex-row align-items-center"> 
-                    @if (!String.IsNullOrEmpty(Post.Author.Photo))
-                    {
-                    <img src="data:image;base64,@Post.Author.Photo" class="rounded-circle" width=50 height=50 alt="photo" style="object-fit: cover;">
-                    } else{
-                    <img src='@avatardefault' class="rounded-circle" width=50 alt="photo">
-                    }
+                    <img src="@Post.Author.Photo" class="rounded-circle" width=50 height=50 alt="photo" style="object-fit: cover;">
+                    
                     <div class="d-flex flex-column ms-2"> 
                         <span class="font-weight-bold">@Post.Author.FName @Post.Author.LName</span> <small class="text-primary" style="text-align: left">@Post.AuthorId</small> 
                     </div>
@@ -73,13 +61,13 @@
                 <hr>
                 <div class="d-flex justify-content-left align-items-center stats">
                     <div class="likes">
-                    <a asp-action="Details" asp-controller="Post" asp-route-id="@Post.PostID" class="btn btn-outline-success text-decoration-none">@Post.Likes.Count  Likes <i class="fa fa-thumbs-up"></i></a>
+                    <span class="text-success text-decoration-none">@Post.Likes.Count  Likes <i class="fa fa-thumbs-up"></i></span>
                     </div>
                     <div class="dislikes">
-                    <a asp-action="Details" asp-controller="Post" asp-route-id="@Post.PostID" class="btn btn-outline-danger">@Post.Dislikes.Count Dislikes <i class="fa fa-thumbs-down ml-2"></i> </a>
+                    <span class="text-danger text-decoration-none">@Post.Dislikes.Count Dislikes <i class="fa fa-thumbs-down ms-2"></i> </span>
                     </div>
                     <div class="comments">
-                    <a asp-action="Details" asp-controller="Post" asp-route-id="@Post.PostID" class="btn btn-outline-primary">@Post.Comments.Count Comments <i class="fa fa-comment ml-2"></i></a>
+                    <span class="text-primary text-decoration-none">@Post.Comments.Count Comments <i class="fa fa-comment ms-2"></i></span>
                     </div>
                 </div>
             </div>

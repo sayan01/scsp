@@ -3,13 +3,6 @@
 @{
     ViewData["Title"] = "Edit Profile";
     ViewBag.currentuser = @Model.currentuser;
-    string username = @Model.currentuser.UserID;
-    string fname = @Model.currentuser.FName;
-    string lname = @Model.currentuser.LName ?? "";
-    string bio = @Model.currentuser.Bio ?? "";
-    string name = fname + " " + lname;
-    string initials = fname[0] + "" + lname[0];
-    string avatardefault = "https://avatars.dicebear.com/api/initials/"+initials+".svg?r=50&b=black";
 }
 
 <form asp-action="Edit">
@@ -21,16 +14,9 @@
             <div class="card">
             <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
                 <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                    @if (String.IsNullOrEmpty(@Model.currentuser.Photo))
-                    {
-                        <img src='@avatardefault'
-                        alt="profile photo" class="img-fluid img-thumbnail mt-4 mb-2"
-                        style="width: 150px; height: 150px; object-fit: cover; z-index: 1; border-radius: 50%">
-                    }else{
-                        <img src='data:image;base64,@Model.currentuser.Photo'
-                        alt="profile photo" class="img-fluid img-thumbnail mt-4 mb-2"
-                        style="width: 150px; height: 150px; object-fit: cover; z-index: 1; border-radius: 50%">
-                    }
+                    <img src='@Model.currentuser.Photo'
+                    alt="profile photo" class="img-fluid img-thumbnail mt-4 mb-2"
+                    style="width: 150px; height: 150px; object-fit: cover; z-index: 1; border-radius: 50%">
                 </div>
                 <div class="ms-3" style="margin-top: 130px;">
                 <h5>@Model.currentuser.UserID</h5>
