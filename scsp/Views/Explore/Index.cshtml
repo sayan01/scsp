@@ -29,6 +29,7 @@
         {
             <tr>
             <td>
+                <a asp-action="Explore" asp-controller="Profile" asp-route-id="@User.UserID" class="text-reset text-decoration-none">
                 <div class="d-flex align-items-center">
                     @if (String.IsNullOrEmpty(@User.Photo))
                     {
@@ -44,6 +45,7 @@
                         <p class="text-muted mb-0">@User.UserID</p>
                     </div>
                 </div>
+                </a>
             </td>
             <td>
                 <p class="fw-normal mb-1">@User.Bio</p>
