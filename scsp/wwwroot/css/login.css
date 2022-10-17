@@ -147,9 +147,8 @@ body {
         display: block;
     }
     .form-control:not(:placeholder-shown):invalid ~ .field-icon {
-        -webkit-transform: translateY(-140%);
-        -ms-transform: translateY(-140%);
-        transform: translateY(-140%);}
+        top: 24px;
+      }
   
   .social-media {
     position: relative;
