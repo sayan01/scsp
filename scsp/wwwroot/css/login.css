@@ -197,11 +197,8 @@ body {
     left: 0; }
   
   /* Create the checkmark/indicator (hidden when not checked) */
-  .checkmark:after {
-    content: "\f0c8";
-    font-family: "FontAwesome";
+  .checkmark {
     position: absolute;
-    color: rgba(0, 0, 0, 0.1);
     font-size: 20px;
     margin-top: -4px;
     -webkit-transition: 0.3s;
@@ -213,12 +210,13 @@ body {
         -o-transition: none;
         transition: none; } }
   
+  .checkbox-wrap input:not(:checked) ~ .checkmark {
+    color: var(--bs-gray-300);
+  }
   /* Show the checkmark when checked */
-  .checkbox-wrap input:checked ~ .checkmark:after {
-    display: block;
-    content: "\f14a";
-    font-family: "FontAwesome";
-    color: rgba(0, 0, 0, 0.2); }
+  .checkbox-wrap input:checked ~ .checkmark {
+    color: #01d28e;
+  }
   
   /* Style the checkmark/indicator */
   .checkbox-primary {
