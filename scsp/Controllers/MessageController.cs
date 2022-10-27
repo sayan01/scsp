@@ -78,6 +78,33 @@ namespace scsp.Controllers
               return _context.Message != null ? View(vm) : Content("Entity set 'SCSPDataContext.Message'  is null.");
         }
 
+        [Authorize]
+        public IActionResult SendAPI(string id, string message="", string errormsg = "")
+        {
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : null;
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(user == null){
+                return Json(new { error = "Unauthorized" });
+            }
+            var to_username = id;
+            var to_user = _context.User.FirstOrDefault(m => m.UserID == to_username);
+            if(to_user == null){
+                return Json(new { error = "User not found" });
+            }
+            var messages = _context.Message
+            .Where(m => ( m.From == user && m.To == to_user ) || ( m.To == user && m.From == to_user ) )
+            .OrderBy(m => m.Time)
+            .ToList();
+            var json = new List<MessageSendAPIViewModel>();
+            foreach (var msg in messages)
+            {
+                var m = new MessageSendAPIViewModel{content = msg.Content, direction =  msg.FromId == username ? "you" : "him", time = msg.Time, from = msg.FromId};
+                json.Add(m);
+            }
+            return _context.Message != null ? Json(json) : Json(new { error = "Db fetch error" });
+        }
+
         
         // POST: Message/Send
         // To protect from overposting attacks, enable the specific properties you want to bind to.

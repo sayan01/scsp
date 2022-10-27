@@ -31,13 +31,13 @@
     </div>
     <hr />
 </div>
-<div class="chats">
-   <ul>
+<div class="chats" id="chatbox">
+   <ul id="chatbox-ul">
     @foreach (var msg in @messages)
     {
         var direction =  @msg.From == @Model.from ? "you" : "him";
       <li>
-        <div class="msg @direction"><span class="partner">@msg.From.UserID</span>@msg.Content<span class="time">@msg.Time</span></div>
+        <div class="msg @direction"><span class="partner">@msg.FromId</span>@msg.Content<span class="time">@msg.Time</span></div>
       </li>
     }
    </ul>
@@ -79,4 +79,5 @@
     <script>
         window.scrollTo(0, document.body.scrollHeight);
     </script>
+    <script src="~/js/messages.js"></script>
 }
