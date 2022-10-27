@@ -4,4 +4,5 @@ td{
 }
 td:hover{
     background-color: var(--bs-gray-400);
+    transform: scale(1.01);
 }

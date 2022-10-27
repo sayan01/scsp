@@ -15,17 +15,38 @@
 <h1>Inbox</h1>
 @foreach (var kv in Model.Users) {
         var User = kv.Key;
-        var Messages = kv.Value;
+        var MsgTime = kv.Value;
         string username = @User.UserID;
         string fname = @User.FName;
         string lname = @User.LName ?? "";
         <a class="text-reset text-decoration-none" asp-action="Send" asp-route-id="@User.UserID" style="padding: 0px">
-        <div class="d-flex flex-row justify-content-between align-items-center m-1 p-2">
+        <div class="d-flex flex-row justify-content-between align-items-center p-2 msg-row">
             <div class="avatar-icon">
                 <img src='@User.Photo' style="object-fit: cover;"> <span class="ps-3">@fname @lname  </span>
             </div>
             <div class="small text-muted text-right">
-                @Messages messages
+                @{
+                    var td = DateTime.Now - MsgTime;
+                    var days = td.Days;
+                    var hours = td.Hours;
+                    var mins = td.Minutes;
+                    var secs = td.Seconds;
+                    var timetext = "";
+                    if(days > 0){
+                        timetext = days + " day" + (days == 1 ? "" : "s") + " ago";
+                    } else if(hours > 0){
+                        timetext = hours + " hour" + (hours == 1 ? "" : "s") + " ago";
+                    }
+                        else if(mins > 0){
+                        timetext = mins + " minute" + (mins == 1 ? "" : "s") + " ago";
+                    }
+                        else if(secs > 0){
+                        timetext = secs + " second" + (secs == 1 ? "" : "s") + " ago";
+                    } else {
+                        timetext = "Now";
+                    }
+                }
+                @timetext
             </div>
         </div>
         </a>

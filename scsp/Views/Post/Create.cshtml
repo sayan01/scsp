@@ -20,7 +20,7 @@
         <form method="post" asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label class="control-label">Enter the content of your post</label>
+                <label class="control-label">Enter the content of your post</label> <span class="text-danger">*</span>
                 <textarea class="form-control" name="content" id="content" required maxlength="250">@Model.Content</textarea>
                 <span class="text-danger"></span>
             </div>

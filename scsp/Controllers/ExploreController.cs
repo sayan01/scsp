@@ -27,8 +27,10 @@ public class ExploreController : Controller
         if(user == null){
             return RedirectToAction("Logout", "Authentication");
         }
+        var users = _context.User.ToList();
+        users.Sort((a,b) => a.UserID.CompareTo(b.UserID));
         ExploreIndexViewModel vm = new ExploreIndexViewModel{
-            Users = _context.User.ToList(),
+            Users = users,
             currentuser = user
         };
         return View(vm);

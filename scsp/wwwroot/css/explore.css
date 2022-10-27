@@ -3,5 +3,6 @@ td{
     transition: all 200ms ease;
 }
 td:hover{
-    background-color: var(--bs-gray-400);
+    background-color: var(--bs-gray-300);
+    transform: scale(1.01);
 }

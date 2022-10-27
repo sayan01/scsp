@@ -31,16 +31,17 @@ namespace scsp.Controllers
                 return RedirectToAction("Logout", "Authentication");
             }
             var messages = _context.Message.Where(m => m.From == user || m.To == user).ToList();
-            var users = new Dictionary<User, int>();
+            var users = new Dictionary<User, DateTime>();
             foreach (var message in messages)
             {
                 User frnd;
                 if( message.FromId == username) frnd = _context.User.FirstOrDefault(u => u.UserID == message.ToId) ?? user;
                 else frnd = _context.User.FirstOrDefault(u => u.UserID == message.FromId) ?? user;
                 if(frnd == user) continue;
-                if(! users.ContainsKey(frnd)) users.Add(frnd, 1);
-                else users[frnd]++;
+                if(! users.ContainsKey(frnd)) users.Add(frnd, message.Time);
+                else users[frnd] = (users[frnd] > message.Time) ? users[frnd] : message.Time;
             }
+            users = (from entry in users orderby entry.Value descending select entry).ToDictionary(pair => pair.Key, pair=>pair.Value);
             var vm = new MessageIndexViewModel(){
                 errormsg = errormsg,
                 Users = users,
