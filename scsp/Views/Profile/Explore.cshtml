@@ -28,20 +28,7 @@
               <img src='@Model.user.Photo'
               alt="profile photo" class="img-fluid img-thumbnail mt-4 mb-2"
               style="width: 150px; height: 150px; object-fit: cover; z-index: 1; border-radius: 50%">
-             <div class="buttons d-flex flex-row" style="z-index: 1;">
-               <a type="button" class="btn @follow_design me-2 d-flex flex-row align-items-center" asp-action="Follow" asp-controller="Profile" asp-route-id="@username">
-                <i class="fas fa-user-plus"></i> 
-                @if (ifollowhim)
-                {
-                  <div>Following</div>
-                }else{
-                  <div>Follow</div>
-                }
-              </a>
-              <a type="button" class="btn btn-outline-primary d-flex flex-row align-items-center" asp-action="Send" asp-controller="Message" asp-route-id="@username">
-                <i class="fas fa-comments"></i> Message
-              </a>
-             </div>
+             
             </div>
             <div class="ms-3" style="margin-top: 130px;">
               <h5>@name</h5>
@@ -49,12 +36,26 @@
             </div>
           </div>
           <div class="p-4 text-black stats-box" style="background-color: #f8f9fa;">
-              @if (hefollowsme)
+            @if (hefollowsme)
               {
                 <div class="followsyou text-muted">
                   follows you
               </div>
               }
+            <div class="buttons d-flex flex-row" style="">
+                <a type="button" class="btn @follow_design me-2 d-flex flex-row align-items-center" asp-action="Follow" asp-controller="Profile" asp-route-id="@username">
+                  <i class="fas fa-user-plus"></i> 
+                  @if (ifollowhim)
+                  {
+                    <div>Following</div>
+                  }else{
+                    <div>Follow</div>
+                  }
+                </a>
+                <a type="button" class="btn btn-outline-primary d-flex flex-row align-items-center" asp-action="Send" asp-controller="Message" asp-route-id="@username">
+                  <i class="fas fa-comments"></i> Message
+                </a>
+             </div>
             <div class="d-flex justify-content-end text-center py-1">
               <div>
                 <p class="mb-1 h5">@Model.Posts.Count</p>

@@ -28,16 +28,16 @@ namespace scsp.Controllers
         {
             return View();
         }
-        public IActionResult Login(string message = "")
+        public IActionResult Login(string message = "", string alert = "danger")
         {
             AuthLoginViewModel vm = new AuthLoginViewModel(){
                 Title = "Login",
                 AlertMsg = message,
-                AlertType = "danger",
+                AlertType = alert ,
                 password = "",
                 User = new User()
             };
-            return View(vm);
+            return View("Login",vm);
         }
         public IActionResult Register(string message, string alert = "danger")
         {
@@ -48,7 +48,7 @@ namespace scsp.Controllers
                 password = "",
                 User = new User()
             };
-            return View(vm);
+            return View("Register", vm);
         }
         public IActionResult Error(string title, string details)
         {
@@ -61,14 +61,14 @@ namespace scsp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(string username, string fname, string lname, string bio, string password)
         {
-            if(username == null)                        return Register("username cannot be empty");
-            if(password == null)                        return Register("password cannot be empty");
-            if(fname == null)                           return Register("First Name cannot be empty");
-            if(username.Length > 32)                    return Register("Username cannot be greater than 32 characters");
-            if(password.Length < 8)                     return Register("Password cannot be smaller than 8 characters");
-            if(fname.Length > 32)                       return Register("First Name cannot be greater than 32 characters");
-            if(lname != null && lname.Length > 32)      return Register("Last Name cannot be greater than 32 characters");
-            if(bio != null && bio.Length > 250)         return Register("Bio cannot be greater than 250 characters");
+            if(username == null)                        return RedirectToAction(nameof(Register), new { message = "username cannot be empty" });
+            if(password == null)                        return RedirectToAction(nameof(Register), new { message = "password cannot be empty"});
+            if(fname == null)                           return RedirectToAction(nameof(Register), new { message = "First Name cannot be empty"});
+            if(username.Length > 32)                    return RedirectToAction(nameof(Register), new { message = "Username cannot be greater than 32 characters"});
+            if(password.Length < 8)                     return RedirectToAction(nameof(Register), new { message = "Password cannot be smaller than 8 characters"});
+            if(fname.Length > 32)                       return RedirectToAction(nameof(Register), new { message = "First Name cannot be greater than 32 characters"});
+            if(lname != null && lname.Length > 32)      return RedirectToAction(nameof(Register), new { message = "Last Name cannot be greater than 32 characters"});
+            if(bio != null && bio.Length > 250)         return RedirectToAction(nameof(Register), new { message = "Bio cannot be greater than 250 characters"});
             
             User user = new User();
 
@@ -99,10 +99,10 @@ namespace scsp.Controllers
                 if(userifalreadyexists == null){
                     _context.Add(user);
                     await _context.SaveChangesAsync();
-                    return Register("Registration successful", "success");
+                    return RedirectToAction(nameof(Login), new { message = "Registration successful", alert = "success"});
                 }
                 else{
-                    return Register("User with the username (" + username + ") already exists, please choose some other username.");
+                    return RedirectToAction(nameof(Register), new { message = "User with the username (" + username + ") already exists, please choose some other username."});
                 }
                 
             }
@@ -120,8 +120,8 @@ namespace scsp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(string username, string password, string remember)
         {
-            if(username == null)   return Login("Username cannot be empty");
-            if(password == null)   return Login("Password cannot be empty");
+            if(username == null)   return RedirectToAction( nameof(Login), new { message = "Username cannot be empty" });
+            if(password == null)   return RedirectToAction( nameof(Login), new { message = "Password cannot be empty" });
             Console.WriteLine("Remember Me:" + remember);
             string passwordhash;
             // finding the password hash from username+password
@@ -137,7 +137,7 @@ namespace scsp.Controllers
             {
                 var user = _context.User.FirstOrDefault(m => m.UserID == username);
                 if(user == null || user.PasswordHash != passwordhash){
-                    return Login("Incorrect Username or Password");
+                    return RedirectToAction( nameof(Login), new { message = "Incorrect Username or Password" });
                 }
                 else{
                     var claims = new List<Claim>{ new Claim(ClaimTypes.Name, username) };

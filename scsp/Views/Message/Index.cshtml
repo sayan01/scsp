@@ -13,7 +13,6 @@
     </div>
 }
 <h1>Inbox</h1>
-<div class="row sideBar">
 @foreach (var kv in Model.Users) {
         var User = kv.Key;
         var Messages = kv.Value;
@@ -21,28 +20,16 @@
         string fname = @User.FName;
         string lname = @User.LName ?? "";
         <a class="text-reset text-decoration-none" asp-action="Send" asp-route-id="@User.UserID" style="padding: 0px">
-        <div class="row sideBar-body">
-            <div class="col-sm-3 col-xs-3 sideBar-avatar">
-                <div class="avatar-icon">
-                    <img src='@User.Photo' style="object-fit: cover;">
-                </div>
+        <div class="d-flex flex-row justify-content-between align-items-center m-1 p-2">
+            <div class="avatar-icon">
+                <img src='@User.Photo' style="object-fit: cover;"> <span class="ps-3">@fname @lname  </span>
             </div>
-            <div class="col-sm-9 col-xs-9 sideBar-main">
-                <div class="row">
-                    <div class="col-sm-8 col-xs-8 sideBar-name">
-                        <span class="name-meta">@fname @lname
-                        </span>
-                    </div>
-                    <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
-                        <span class="time-meta pull-right">@Messages messages
-                        </span>
-                    </div>
-                </div>
+            <div class="small text-muted text-right">
+                @Messages messages
             </div>
         </div>
         </a>
     }
-</div>
 
 @section Styles{
     <link href="@Url.Content("~/css/messageinbox.css")" rel="stylesheet" type="text/css" />

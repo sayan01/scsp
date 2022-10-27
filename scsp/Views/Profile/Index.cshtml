@@ -18,15 +18,7 @@
             <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
               <img src='@Model.currentuser.Photo'
               alt="profile photo" class="img-fluid img-thumbnail mt-4 mb-2"
-              style="width: 150px; height: 150px; object-fit: cover; z-index: 1; border-radius: 50%">
-              <div class="buttons d-flex flex-row" style="z-index: 1;">
-               <a type="button" class="btn btn-outline-success me-2 d-flex flex-row align-items-center justify-content-left" asp-action="Edit">
-                <i class="fas fa-user-edit"></i> Edit
-              </a>
-              <a type="button" class="btn btn-outline-primary d-flex flex-row align-items-center justify-content-left" asp-action="UpdateDP">
-                <i class="fas fa-camera"></i> Upload
-              </a>
-             </div>
+              style="width: 150px; height: 150px; object-fit: cover; z-index: 1; border-radius: 50%; aspect-ratio: 1/1; flex-shrink: 0;">
             </div>
             <div class="ms-3" style="margin-top: 130px;">
               <h5>@Model.currentuser.FName @Model.currentuser.LName</h5>
@@ -34,6 +26,14 @@
             </div>
           </div>
           <div class="p-4 text-black" style="background-color: #f8f9fa;">
+            <div class="buttons d-flex flex-row">
+                <a type="button" class="btn btn-outline-success me-2 d-flex flex-row align-items-center justify-content-left" asp-action="Edit">
+                  <i class="fas fa-user-edit"></i> Edit Profile
+                </a>
+                <a type="button" class="btn btn-outline-primary d-flex flex-row align-items-center justify-content-left" asp-action="UpdateDP">
+                  <i class="fas fa-camera"></i> Change DP
+                </a>
+             </div>
             <div class="d-flex justify-content-end text-center py-1">
               <div>
                 <p class="mb-1 h5">@Model.Posts.Count</p>

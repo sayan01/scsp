@@ -15,6 +15,21 @@
     <h5 class="text-secondary">Welcome @Model.currentuser.FName</h1>
     <a class="btn btn-outline-primary" asp-action="Create" asp-controller="Post"><i class="fa-solid fa-plus"></i> New Post</a>
     <br><hr><br>
+    @if (@Posts.Count == 0)
+    {
+        if(@Model.Following.Count == 0){
+            <h2 class="display-6">You are not following anyone</h2>
+            <h5 class="text-muted">To view feed content follow a few people</h5>
+            <br>
+            <a class="btn btn-success" asp-action="Index" asp-controller="Explore">Explore Users</a>
+        }
+        else{
+            <h2 class="display-6">The people you follow have not posted anything yet</h2>
+            <h5 class="text-muted">To view feed content follow a few more people</h5>
+            <br>
+            <a class="btn btn-success" asp-action="Index" asp-controller="Explore">Explore Users</a>
+        }
+    }
     @foreach (var Post in @Posts)
         {
           <a class="text-reset text-decoration-none" asp-action="Details" asp-controller="Post" asp-route-id="@Post.PostID">

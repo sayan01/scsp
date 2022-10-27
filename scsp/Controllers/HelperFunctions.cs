@@ -17,7 +17,7 @@ namespace scsp.Controllers
             double order = Math.Log(Math.Max(Math.Abs(s), 1), 10);
             double sign = ( s > 0 ? 1 : ( s < 0 ? -1 : 0 ) ) ;
             double seconds = epoch_seconds(date) - 1664562600;
-            return Math.Round(sign * order + seconds / 4500, 7);
+            return Math.Round(sign * order + seconds / 45000, 7);
         }
 
         public static double confidence(int likes, int dislikes){
