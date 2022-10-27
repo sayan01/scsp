@@ -66,7 +66,7 @@
                   var Post = Model.Posts.ToList()[i*2+j];
                   <div class="col">
                     <a class="text-reset text-decoration-none" asp-action="Details" asp-controller="Post" asp-route-id="@Post.PostID">
-                    <div class="card">
+                    <div class="card post-card">
                       @if (!String.IsNullOrEmpty(Post.Photo))
                       {
                         <img src="data:image;base64,@Post.Photo" class="card-img-top" alt="photo">
