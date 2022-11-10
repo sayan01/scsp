@@ -194,6 +194,60 @@ public class ProfileController : Controller
         }
 
         [Authorize]
+        public IActionResult Followers(string id = ""){
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : "";
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(username == null || user == null){
+                return RedirectToAction("Logout", "Authentication");
+            }
+            if(String.IsNullOrEmpty(id)) id =  username;
+            var targetuser = _context.User.FirstOrDefault(m => m.UserID == id);
+            if(targetuser == null){
+                return Content("Target User is not valid");
+            }
+            var useruser = _context.UserUser.Where(uu => uu.FolloweeId == id).ToList();
+            foreach (var uu in useruser)
+            {
+                uu.Follower = _context.User.Find(uu.FollowerId) ?? new Models.User();
+                uu.Followee = _context.User.Find(uu.FolloweeId) ?? new Models.User();
+            }
+            var vm = new ProfileFollowersViewModel{
+                currentuser = user,
+                targetuser = targetuser,
+                Followers = useruser
+            };
+            return View(nameof(Followers),vm);
+        }
+
+        [Authorize]
+        public IActionResult Following(string id = ""){
+            var identity = HttpContext.User.Identity;
+            var username = identity != null ? identity.Name : "";
+            var user = _context.User.FirstOrDefault(m => m.UserID == username);
+            if(username == null || user == null){
+                return RedirectToAction("Logout", "Authentication");
+            }
+            if(String.IsNullOrEmpty(id)) id =  username;
+            var targetuser = _context.User.FirstOrDefault(m => m.UserID == id);
+            if(targetuser == null){
+                return Content("Target User is not valid");
+            }
+            var useruser = _context.UserUser.Where(uu => uu.FollowerId == id).ToList();
+            foreach (var uu in useruser)
+            {
+                uu.Follower = _context.User.Find(uu.FollowerId) ?? new Models.User();
+                uu.Followee = _context.User.Find(uu.FolloweeId) ?? new Models.User();
+            }
+            var vm = new ProfileFollowingViewModel{
+                currentuser = user,
+                targetuser = targetuser,
+                Following = useruser
+            };
+            return View(nameof(Following),vm);
+        }
+        
+        [Authorize]
         public async Task<IActionResult> Follow(string id)
         {
             var username = id;

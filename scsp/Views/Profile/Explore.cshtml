@@ -57,18 +57,32 @@
                 </a>
              </div>
             <div class="d-flex justify-content-end text-center py-1">
-              <div>
-                <p class="mb-1 h5">@Model.Posts.Count</p>
-                <p class="small text-muted mb-0">Posts</p>
-              </div>
-              <div class="px-3">
-                <p class="mb-1 h5">@Model.Followers.Count</p>
-                <p class="small text-muted mb-0">Followers</p>
-              </div>
-              <div>
+              <a href="#posts" class="text-reset text-decoration-none">
+                <div class="stats-click">
+                  <p class="mb-1 h5">@Model.Posts.Count</p>
+                  <p class="small text-muted mb-0">Posts</p>
+                </div>
+              </a>
+              <a 
+                asp-controller="Profile" 
+                asp-action="Followers" 
+                asp-route-id="@username"
+                class="text-decoration-none text-reset">
+                <div class="stats-click mx-3">
+                  <p class="mb-1 h5">@Model.Followers.Count</p>
+                  <p class="small text-muted mb-0">Followers</p>
+                </div>
+              </a>
+              <a 
+                asp-controller="Profile" 
+                asp-action="Following" 
+                asp-route-id="@username"
+                class="text-decoration-none text-reset">
+                <div class="stats-click">
                 <p class="mb-1 h5">@Model.Following.Count</p>
                 <p class="small text-muted mb-0">Following</p>
-              </div>
+                </div>
+              </a>
             </div>
           </div>
           @* TODO: Make this a partial view *@
@@ -79,7 +93,7 @@
                 <p class="font-italic mb-1">@bio</p>
               </div>
             </div>
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-4" id="posts">
               <p class="lead fw-normal mb-0">Posts</p>
               @* <p class="mb-0"><a asp-action="Create" asp-controller="Post" class="btn btn-outline-dark"><i class="fa-solid fa-plus"></i> New Post</a></p> *@
             </div>

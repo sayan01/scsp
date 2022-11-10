@@ -1,0 +1,46 @@
+@model scsp.ViewModels.ProfileFollowersViewModel;
+@{
+    ViewData["Title"] = "Followers";
+    var user = @Model.currentuser;
+    ViewBag.currentuser = user;
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/explore.css")" rel="stylesheet" type="text/css" />
+}
+
+<div class="results">
+    <table class="table align-middle mb-0 bg-white">
+    <thead class="bg-light">
+        <tr>
+        <th>Followers of 
+            <a 
+            class="text-decoration-none"
+            asp-controller="Profile" 
+            asp-action="Explore" 
+            asp-route-id="@Model.targetuser.UserID">
+                @Model.targetuser.UserID
+            </a>
+        </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var useruser in @Model.Followers) {
+            <tr>
+            <td>
+                @{var User = useruser.Follower;}
+                <a asp-action="Explore" asp-controller="Profile" asp-route-id="@User.UserID" class="text-reset text-decoration-none">
+                <div class="d-flex align-items-center">                    
+                    <img src="@User.Photo" alt="" style="width: 45px; height: 45px; object-fit: cover" class="rounded-circle" />
+                    <div class="ms-3">
+                        <p class="fw-bold mb-1">@User.FName @User.LName</p>
+                        <p class="text-muted mb-0">@User.UserID</p>
+                    </div>
+                </div>
+                </a>
+            </td>
+            </tr>
+        }
+    </tbody>
+    </table>
+</div>
